@@ -1,7 +1,7 @@
 {
-  "name": "ant-design-pro",
-  "version": "2.2.0",
-  "description": "An out-of-box UI solution for enterprise applications",
+  "name": "admin-middleground",
+  "version": "0.0.1",
+  "description": "base on ant-design-pro",
   "private": true,
   "scripts": {
     "presite": "cd functions && npm install",
