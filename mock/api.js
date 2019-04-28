@@ -321,6 +321,31 @@ function getFakeCaptcha(req, res) {
   return res.json('captcha-xxx');
 }
 
+const menuData = [
+  {
+    path: '/list',
+    icon: 'table',
+    name: 'list',
+    routes: [
+      {
+        path: '/list/table-list',
+        name: 'searchtable',
+        component: './List/TableList',
+      },
+      {
+        path: '/list/record-detail',
+        name: 'recorddetail',
+        hideInMenu: true,
+        component: './List/RecordDetail',
+      },
+    ],
+  },
+];
+
+function getMenuData(req, res) {
+  return res.json(menuData);
+}
+
 export default {
   'GET /api/project/notice': getNotice,
   'GET /api/activities': getActivities,
@@ -333,4 +358,5 @@ export default {
   'GET /api/fake_list': getFakeList,
   'POST /api/fake_list': postFakeList,
   'GET /api/captcha': getFakeCaptcha,
+  'GET /api/getMenuData': getMenuData,
 };

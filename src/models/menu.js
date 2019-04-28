@@ -2,6 +2,7 @@ import memoizeOne from 'memoize-one';
 import isEqual from 'lodash/isEqual';
 import { formatMessage } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
+import { getMenuData } from '@/services/api';
 
 const { check } = Authorized;
 
@@ -96,8 +97,10 @@ export default {
   },
 
   effects: {
-    *getMenuData({ payload }, { put }) {
-      const { routes, authority } = payload;
+    *getMenuData({ payload }, { call, put }) {
+      const routes = yield call(getMenuData);
+      const { authority } = payload;
+      console.log(payload);
       const menuData = filterMenuData(memoizeOneFormatter(routes, authority));
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(menuData);
       yield put({
