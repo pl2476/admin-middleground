@@ -134,6 +134,11 @@ export default [
               },
             ],
           },
+          {
+            path: '/list/record-detail',
+            name: 'recorddetail',
+            component: './List/RecordDetail',
+          },
         ],
       },
       {

@@ -15,6 +15,7 @@ export default {
   'menu.list.searchtable': '查询表格',
   'menu.list.basiclist': '标准列表',
   'menu.list.cardlist': '卡片列表',
+  'menu.list.recorddetail': '记录详情',
   'menu.list.searchlist': '搜索列表',
   'menu.list.searchlist.articles': '搜索列表（文章）',
   'menu.list.searchlist.projects': '搜索列表（项目）',

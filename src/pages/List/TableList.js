@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import router from 'umi/router';
 import {
   Row,
   Col,
@@ -343,7 +344,7 @@ class TableList extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a onClick={() => this.handleCheckVisible(true, record)}>查看</a>
         </Fragment>
       ),
     },
@@ -465,6 +466,22 @@ class TableList extends PureComponent {
     this.setState({
       updateModalVisible: !!flag,
       stepFormValues: record || {},
+    });
+  };
+
+  handleCheckVisible = (flag, record) => {
+    console.info(flag, record);
+    router.push({
+      pathname: '/list/record-detail',
+      query: {
+        id: record.callNo,
+      },
+      params: {
+        id: record.callNo,
+        name: record.name,
+        desc: record.desc,
+        createdAt: record.createdAt,
+      },
     });
   };
 

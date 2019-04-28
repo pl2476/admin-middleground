@@ -14,6 +14,7 @@ export default {
   'menu.list': 'List',
   'menu.list.searchtable': 'Search Table',
   'menu.list.basiclist': 'Basic List',
+  'menu.list.recorddetail': 'Record Detail',
   'menu.list.cardlist': 'Card List',
   'menu.list.searchlist': 'Search List',
   'menu.list.searchlist.articles': 'Search List(articles)',
