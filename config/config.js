@@ -111,4 +111,11 @@ export default {
   },
 
   chainWebpack: webpackPlugin,
+  proxy: {
+    '/proxy': {
+      target: 'http://localhost:8080/',
+      changeOrigin: true,
+      pathRewrite: { '^/proxy': '' },
+    },
+  },
 };

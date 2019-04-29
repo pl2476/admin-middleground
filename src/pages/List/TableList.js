@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
+// import moment from 'moment';
 import router from 'umi/router';
 import {
   Row,
@@ -17,7 +17,7 @@ import {
   DatePicker,
   Modal,
   message,
-  Badge,
+  // Badge,
   Divider,
   Steps,
   Radio,
@@ -36,8 +36,8 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+// const statusMap = ['default', 'processing', 'success', 'error'];
+// const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -274,9 +274,9 @@ class UpdateForm extends PureComponent {
 }
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
+@connect(({ customs, loading }) => ({
+  customs,
+  loading: loading.models.customs,
 }))
 @Form.create()
 class TableList extends PureComponent {
@@ -291,52 +291,20 @@ class TableList extends PureComponent {
 
   columns = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
+      title: 'fullName',
+      dataIndex: 'fullName',
     },
     {
-      title: '描述',
-      dataIndex: 'desc',
+      title: 'email',
+      dataIndex: 'email',
     },
     {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      align: 'right',
-      render: val => `${val} 万`,
-      // mark to display a total number
-      needTotal: true,
+      title: 'userCode',
+      dataIndex: 'userCode',
     },
     {
-      title: '状态',
-      dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-        {
-          text: status[2],
-          value: 2,
-        },
-        {
-          text: status[3],
-          value: 3,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
-    },
-    {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: 'userPhone',
+      dataIndex: 'userPhone',
     },
     {
       title: '操作',
@@ -353,7 +321,12 @@ class TableList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'customs/fetch',
+      payload: {
+        userCode: 1,
+        pageNumber: 1,
+        pageSize: 10,
+      },
     });
   }
 
@@ -378,7 +351,7 @@ class TableList extends PureComponent {
     }
 
     dispatch({
-      type: 'rule/fetch',
+      type: 'customs/getCustomsData',
       payload: params,
     });
   };
@@ -390,7 +363,7 @@ class TableList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
+      type: 'customs/getCustomsData',
       payload: {},
     });
   };
@@ -450,7 +423,7 @@ class TableList extends PureComponent {
       });
 
       dispatch({
-        type: 'rule/fetch',
+        type: 'customs/getCustomsData',
         payload: values,
       });
     });
@@ -634,7 +607,7 @@ class TableList extends PureComponent {
 
   render() {
     const {
-      rule: { data },
+      customs: { data },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -674,6 +647,7 @@ class TableList extends PureComponent {
               )}
             </div>
             <StandardTable
+              rowKey="id"
               selectedRows={selectedRows}
               loading={loading}
               data={data}
