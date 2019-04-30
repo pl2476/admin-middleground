@@ -18,7 +18,7 @@ import {
   Modal,
   message,
   // Badge,
-  Divider,
+  // Divider,
   Steps,
   Radio,
 } from 'antd';
@@ -78,14 +78,7 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       formVals: {
-        name: props.values.name,
-        desc: props.values.desc,
-        key: props.values.key,
-        target: '0',
-        template: '0',
-        type: '1',
-        time: '',
-        frequency: 'month',
+        userCode: props.values.userCode,
       },
       currentStep: 0,
     };
@@ -194,10 +187,10 @@ class UpdateForm extends PureComponent {
       ];
     }
     return [
-      <FormItem key="name" {...this.formLayout} label="规则名称">
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入规则名称！' }],
-          initialValue: formVals.name,
+      <FormItem key="userCode" {...this.formLayout} label="userCode">
+        {form.getFieldDecorator('userCode', {
+          rules: [{ required: true, message: '请输入！' }],
+          initialValue: formVals.userCode,
         })(<Input placeholder="请输入" />)}
       </FormItem>,
       <FormItem key="desc" {...this.formLayout} label="规则描述">
@@ -285,7 +278,9 @@ class TableList extends PureComponent {
     updateModalVisible: false,
     expandForm: false,
     selectedRows: [],
-    formValues: {},
+    formValues: {
+      // userCode: props.values.userCode
+    },
     stepFormValues: {},
   };
 
@@ -310,9 +305,7 @@ class TableList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleCheckVisible(true, record)}>查看</a>
+          <a onClick={() => this.handleCheckVisible(true, record)}>详情</a>
         </Fragment>
       ),
     },
@@ -333,7 +326,6 @@ class TableList extends PureComponent {
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
-
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
@@ -341,9 +333,10 @@ class TableList extends PureComponent {
     }, {});
 
     const params = {
-      currentPage: pagination.current,
+      pageNumber: pagination.current,
       pageSize: pagination.pageSize,
-      ...formValues,
+      // ...formValues,
+      userCode: formValues.userCode || '1',
       ...filters,
     };
     if (sorter.field) {
@@ -351,7 +344,7 @@ class TableList extends PureComponent {
     }
 
     dispatch({
-      type: 'customs/getCustomsData',
+      type: 'customs/fetch',
       payload: params,
     });
   };
@@ -363,8 +356,12 @@ class TableList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'customs/getCustomsData',
-      payload: {},
+      type: 'customs/fetch',
+      payload: {
+        userCode: 1,
+        pageNumber: 1,
+        pageSize: 10,
+      },
     });
   };
 
@@ -423,8 +420,12 @@ class TableList extends PureComponent {
       });
 
       dispatch({
-        type: 'customs/getCustomsData',
-        payload: values,
+        type: 'customs/fetch',
+        payload: {
+          userCode: values.userCode || '1',
+          pageNumber: 1,
+          pageSize: 10,
+        },
       });
     });
   };
@@ -443,7 +444,6 @@ class TableList extends PureComponent {
   };
 
   handleCheckVisible = (flag, record) => {
-    console.info(flag, record);
     router.push({
       pathname: '/list/record-detail',
       query: {
@@ -494,8 +494,8 @@ class TableList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="userCode">
+              {getFieldDecorator('userCode')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -534,8 +534,8 @@ class TableList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="userCode">
+              {getFieldDecorator('userCode')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -559,26 +559,6 @@ class TableList extends PureComponent {
             <FormItem label="更新日期">
               {getFieldDecorator('date')(
                 <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status3')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status4')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
               )}
             </FormItem>
           </Col>
@@ -626,13 +606,20 @@ class TableList extends PureComponent {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleUpdate: this.handleUpdate,
     };
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      pageSize: data.pagination.pageSize || 10,
+      current: data.pagination.current || 1,
+      total: data.pagination.total,
+    };
     return (
       <PageHeaderWrapper title="查询表格">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(false)}>
                 新建
               </Button>
               {selectedRows.length > 0 && (
@@ -651,6 +638,7 @@ class TableList extends PureComponent {
               selectedRows={selectedRows}
               loading={loading}
               data={data}
+              pagination={paginationProps}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
