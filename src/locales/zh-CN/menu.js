@@ -36,4 +36,9 @@ export default {
   'menu.account.settings': '个人设置',
   'menu.account.trigger': '触发报错',
   'menu.account.logout': '退出登录',
+  'menu.demo': '模块1',
+  'menu.demo.searchtable': '列表',
+  'menu.demo.searchtable.index': '搜索列表',
+  'menu.demo.searchtable.recorddetail': '详情',
+  'menu.demo.chart': '图表',
 };

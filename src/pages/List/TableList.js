@@ -445,15 +445,16 @@ class TableList extends PureComponent {
 
   handleCheckVisible = (flag, record) => {
     router.push({
-      pathname: '/list/record-detail',
-      query: {
-        id: record.callNo,
-      },
+      pathname: '/demo/list/detail',
+      // query: {
+      //   id: record.id,
+      // },
       params: {
-        id: record.callNo,
-        name: record.name,
-        desc: record.desc,
-        createdAt: record.createdAt,
+        id: record.id,
+        fullName: record.fullName,
+        email: record.email,
+        userCode: record.userCode,
+        userPhone: record.userPhone,
       },
     });
   };

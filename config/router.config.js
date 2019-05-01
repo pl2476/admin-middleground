@@ -141,6 +141,41 @@ export default [
           },
         ],
       },
+      // list
+      {
+        path: '/demo',
+        icon: 'table',
+        name: 'demo',
+        routes: [
+          {
+            path: '/demo/list',
+            name: 'searchtable',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/demo/list',
+                redirect: '/demo/list/index',
+              },
+              {
+                path: '/demo/list/index',
+                name: 'index',
+                component: './List/TableList',
+              },
+              {
+                path: '/demo/list/detail',
+                name: 'recorddetail',
+                component: './List/RecordDetail',
+              },
+            ],
+          },
+          {
+            path: '/demo/chart',
+            name: 'chart',
+            hideInMenu: false,
+            // component: './List/RecordDetail',
+          },
+        ],
+      },
       {
         path: '/profile',
         name: 'profile',

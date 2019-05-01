@@ -323,20 +323,37 @@ function getFakeCaptcha(req, res) {
 
 const menuData = [
   {
-    path: '/list',
+    path: '/demo',
     icon: 'table',
-    name: 'list',
+    name: 'demo',
     routes: [
       {
-        path: '/list/table-list',
+        path: '/demo/list',
         name: 'searchtable',
-        component: './List/TableList',
+        hideChildrenInMenu: true,
+        routes: [
+          {
+            path: '/demo/list',
+            redirect: '/demo/list/index',
+          },
+          {
+            path: '/demo/list/index',
+            name: 'index',
+            component: './List/TableList',
+          },
+          {
+            path: '/demo/list/detail',
+            name: 'recorddetail',
+            component: './List/RecordDetail',
+          },
+        ],
       },
+
       {
-        path: '/list/record-detail',
-        name: 'recorddetail',
-        hideInMenu: true,
-        component: './List/RecordDetail',
+        path: '/demo/chart',
+        name: 'chart',
+        hideInMenu: false,
+        // component: './List/RecordDetail',
       },
     ],
   },

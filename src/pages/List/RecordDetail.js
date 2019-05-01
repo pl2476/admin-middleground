@@ -19,16 +19,16 @@ class RecordDetail extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { location } = this.props;
     const data = location.params || {};
     return (
       <PageHeaderWrapper title="基础详情页">
         <Card bordered={false}>
           <DescriptionList size="large" title="基础信息" style={{ marginBottom: 32 }}>
-            <Description term="名称">{data.name || ''}</Description>
-            <Description term="描述">{data.desc || ''}</Description>
-            <Description term="创建时间">{data.createdAt || ''}</Description>
+            <Description term="fullName">{data.fullName || ''}</Description>
+            <Description term="email">{data.email || ''}</Description>
+            <Description term="userCode">{data.userCode || ''}</Description>
+            <Description term="userPhone">{data.userPhone || ''}</Description>
           </DescriptionList>
         </Card>
       </PageHeaderWrapper>
