@@ -1,4 +1,5 @@
-import React, { Suspense } from 'react';
+// import React, { Suspense } from 'react';
+import React from 'react';
 import { Layout } from 'antd';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
@@ -11,11 +12,11 @@ import Media from 'react-media';
 import { formatMessage } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import logo from '../assets/logo.svg';
-import Footer from './Footer';
+// import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
-import PageLoading from '@/components/PageLoading';
+// import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import { title } from '../defaultSettings';
 import styles from './BasicLayout.less';
@@ -199,7 +200,7 @@ class BasicLayout extends React.PureComponent {
               {children}
             </Authorized>
           </Content>
-          <Footer />
+          {/* <Footer /> */}
         </Layout>
       </Layout>
     );
@@ -214,7 +215,7 @@ class BasicLayout extends React.PureComponent {
             )}
           </ContainerQuery>
         </DocumentTitle>
-        <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense>
+        {/* <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense> */}
       </React.Fragment>
     );
   }
