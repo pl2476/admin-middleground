@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import Scheduler, { SchedulerData, ViewTypes, DemoData } from 'react-big-scheduler';
 import 'react-big-scheduler/lib/css/style.css';
