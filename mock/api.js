@@ -353,7 +353,7 @@ const menuData = [
         path: '/demo/chart',
         name: 'chart',
         hideInMenu: false,
-        // component: './List/RecordDetail',
+        component: './List/GantDemo',
       },
     ],
   },

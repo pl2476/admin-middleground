@@ -40,5 +40,5 @@ export default {
   'menu.demo.searchtable': '列表',
   'menu.demo.searchtable.index': '搜索列表',
   'menu.demo.searchtable.recorddetail': '详情',
-  'menu.demo.chart': '图表',
+  'menu.demo.chart': '甘特图',
 };

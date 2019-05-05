@@ -302,7 +302,7 @@ class TableList extends PureComponent {
       dataIndex: 'userPhone',
     },
     {
-      title: '操作',
+      title: '',
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleCheckVisible(true, record)}>详情</a>
