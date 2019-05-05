@@ -4,7 +4,7 @@ import 'react-big-scheduler/lib/css/style.css';
 
 console.log(DemoData);
 
-class GantDemo extends PureComponent {
+class GantDemo1 extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -199,4 +199,4 @@ class GantDemo extends PureComponent {
   }
 }
 
-export default GantDemo;
+export default GantDemo1;

@@ -348,12 +348,17 @@ const menuData = [
           },
         ],
       },
-
       {
-        path: '/demo/chart',
-        name: 'chart',
+        path: '/demo/GantDemo1',
+        name: 'GantDemo1',
         hideInMenu: false,
-        component: './List/GantDemo',
+        component: './List/GantDemo1',
+      },
+      {
+        path: '/demo/GantDemo2',
+        name: 'GantDemo2',
+        hideInMenu: false,
+        component: './List/GantDemo2',
       },
     ],
   },
