@@ -19,7 +19,7 @@ import {
   Modal,
   message,
   // Badge,
-  // Divider,
+  Divider,
   Steps,
   Radio,
 } from 'antd';
@@ -40,6 +40,9 @@ const getValue = obj =>
     .join(',');
 // const statusMap = ['default', 'processing', 'success', 'error'];
 // const status = ['关闭', '运行中', '已上线', '异常'];
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
+});
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
@@ -309,7 +312,13 @@ class TableList extends PureComponent {
       title: '',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleCheckVisible(true, record)}>详情</a>
+          <a onClick={() => this.handleCheckVisible(true, record)}>
+            <Icon type="profile" />
+          </a>
+          <Divider type="vertical" />
+          <a>
+            <IconFont type="icon-tuichu" />
+          </a>
         </Fragment>
       ),
     },

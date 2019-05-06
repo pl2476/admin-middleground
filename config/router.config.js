@@ -32,6 +32,7 @@ export default [
           {
             path: '/dashboard/monitor',
             name: 'monitor',
+            authority: ['user'],
             component: './Dashboard/Monitor',
           },
           {
