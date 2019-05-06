@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import AsyncPaginate from 'react-select-async-paginate';
 // import moment from 'moment';
 import router from 'umi/router';
 import {
@@ -11,8 +12,8 @@ import {
   Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
+  // Dropdown,
+  // Menu,
   InputNumber,
   DatePicker,
   Modal,
@@ -22,6 +23,7 @@ import {
   Steps,
   Radio,
 } from 'antd';
+import loadOptions from './loadOptions';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -267,9 +269,10 @@ class UpdateForm extends PureComponent {
 }
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ customs, loading }) => ({
+@connect(({ customs, loading, client }) => ({
   customs,
   loading: loading.models.customs,
+  client,
 }))
 @Form.create()
 class TableList extends PureComponent {
@@ -281,6 +284,7 @@ class TableList extends PureComponent {
     formValues: {
       // userCode: props.values.userCode
     },
+    clientValue: undefined,
     stepFormValues: {},
   };
 
@@ -487,10 +491,59 @@ class TableList extends PureComponent {
     this.handleUpdateModalVisible();
   };
 
+  onChange = data => {
+    console.log(data);
+  };
+
+  handleClientSearch = value => {
+    this.setState({ clientValue: value });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'client/list',
+      payload: {
+        userCode: value || '1',
+        pageNumber: 1,
+        pageSize: 10,
+      },
+    });
+  };
+
+  handleChange = value => {
+    // this.setState({ value });
+    console.log(value);
+  };
+
+  onPopupScroll = e => {
+    const { dispatch } = this.props;
+    const { clientValue } = this.state;
+    const { client } = this.props;
+    const { pagination } = client.data || {};
+
+    e.persist();
+    // const target = e.target;
+    if (e.target.scrollTop + e.target.offsetHeight === e.target.scrollHeight) {
+      if (pagination && pagination.total > pagination.pageSize * pagination.current) {
+        console.log('nextPage', pagination.current + 1);
+        dispatch({
+          type: 'client/list',
+          payload: {
+            userCode: clientValue,
+            pageNumber: pagination.current + 1,
+            pageSize: 10,
+          },
+        });
+      }
+    }
+  };
+
   renderSimpleForm() {
     const {
+      client: { data },
       form: { getFieldDecorator },
     } = this.props;
+
+    const clientOptions = data.list.map(d => <Option key={d.userCode}>{d.fullName}</Option>);
+
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -500,11 +553,23 @@ class TableList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+            <FormItem label="client">
+              {getFieldDecorator('client')(
+                <Select
+                  // ref={(input) => { ref = input }}
+                  showSearch
+                  placeholder="请选择"
+                  showArrow={false}
+                  // value={clientValue}
+                  filterOption={false}
+                  onSearch={this.handleClientSearch}
+                  onChange={this.handleChange}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onPopupScroll={this.onPopupScroll.bind(this)}
+                  notFoundContent={null}
+                  style={{ width: '100%' }}
+                >
+                  {clientOptions}
                 </Select>
               )}
             </FormItem>
@@ -531,6 +596,20 @@ class TableList extends PureComponent {
     const {
       form: { getFieldDecorator },
     } = this.props;
+    const defaultAdditional = {
+      page: 1,
+    };
+    const loadPageOptions = async (q, prevOptions, { page }) => {
+      const { options, hasMore } = await loadOptions(q, page);
+      return {
+        options,
+        hasMore,
+
+        additional: {
+          page: page + 1,
+        },
+      };
+    };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -540,24 +619,28 @@ class TableList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
+            <FormItem label="client">
+              {getFieldDecorator('client')(
+                <AsyncPaginate
+                  additional={defaultAdditional}
+                  // value={value}
+                  loadOptions={loadPageOptions}
+                  onChange={this.onChange}
+                  size="small"
+                  getOptionValue={option => option.id}
+                />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="调用次数">
+            <FormItem label="number">
               {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="更新日期">
+            <FormItem label="date">
               {getFieldDecorator('date')(
                 <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
               )}
@@ -592,12 +675,12 @@ class TableList extends PureComponent {
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
-    );
+    // const menu = (
+    //   <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+    //     <Menu.Item key="remove">删除</Menu.Item>
+    //     <Menu.Item key="approval">批量审批</Menu.Item>
+    //   </Menu>
+    // );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -623,7 +706,7 @@ class TableList extends PureComponent {
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(false)}>
                 新建
               </Button>
-              {selectedRows.length > 0 && (
+              {/* {selectedRows.length > 0 && (
                 <span>
                   <Button>批量操作</Button>
                   <Dropdown overlay={menu}>
@@ -632,7 +715,7 @@ class TableList extends PureComponent {
                     </Button>
                   </Dropdown>
                 </span>
-              )}
+              )} */}
             </div>
             <StandardTable
               rowKey="id"
