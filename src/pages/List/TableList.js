@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import AsyncPaginate from 'react-select-async-paginate';
+// import AsyncPaginate from 'react-select-async-paginate';
 // import moment from 'moment';
 import router from 'umi/router';
 import {
@@ -23,7 +23,7 @@ import {
   Steps,
   Radio,
 } from 'antd';
-import loadOptions from './loadOptions';
+// import loadOptions from './loadOptions';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -594,22 +594,25 @@ class TableList extends PureComponent {
 
   renderAdvancedForm() {
     const {
+      client: { data },
       form: { getFieldDecorator },
     } = this.props;
-    const defaultAdditional = {
-      page: 1,
-    };
-    const loadPageOptions = async (q, prevOptions, { page }) => {
-      const { options, hasMore } = await loadOptions(q, page);
-      return {
-        options,
-        hasMore,
+    const clientOptions = data.list.map(d => <Option key={d.userCode}>{d.fullName}</Option>);
 
-        additional: {
-          page: page + 1,
-        },
-      };
-    };
+    // const defaultAdditional = {
+    //   page: 1,
+    // };
+    // const loadPageOptions = async (q, prevOptions, { page }) => {
+    //   const { options, hasMore } = await loadOptions(q, page);
+    //   return {
+    //     options,
+    //     hasMore,
+
+    //     additional: {
+    //       page: page + 1,
+    //     },
+    //   };
+    // };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -619,7 +622,7 @@ class TableList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="client">
+            {/* <FormItem label="client">
               {getFieldDecorator('client')(
                 <AsyncPaginate
                   additional={defaultAdditional}
@@ -629,6 +632,26 @@ class TableList extends PureComponent {
                   size="small"
                   getOptionValue={option => option.id}
                 />
+              )}
+            </FormItem> */}
+            <FormItem label="client">
+              {getFieldDecorator('client')(
+                <Select
+                  // ref={(input) => { ref = input }}
+                  showSearch
+                  placeholder="请选择"
+                  showArrow={false}
+                  // value={clientValue}
+                  filterOption={false}
+                  onSearch={this.handleClientSearch}
+                  onChange={this.handleChange}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onPopupScroll={this.onPopupScroll.bind(this)}
+                  notFoundContent={null}
+                  style={{ width: '100%' }}
+                >
+                  {clientOptions}
+                </Select>
               )}
             </FormItem>
           </Col>
