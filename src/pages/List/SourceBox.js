@@ -23,6 +23,9 @@ export default DragSource(
   'box',
   {
     beginDrag: () => ({}),
+    endDrag(props, monitor) {
+      console.log('endDrag', props, monitor);
+    },
   },
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),

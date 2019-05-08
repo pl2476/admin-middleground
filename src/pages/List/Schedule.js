@@ -19,9 +19,10 @@ const events = [
   {
     id: 1,
     title: 'MS training',
+    allDay: true,
     start: new Date(2018, 0, 29, 14, 0, 0),
     end: new Date(2018, 0, 29, 16, 30, 0),
-    resourceId: 2,
+    // resourceId: 2,
   },
   {
     id: 2,
@@ -39,6 +40,11 @@ const events = [
   },
 ];
 
+const propTypes = {};
+
+const EventComponent = function EventComponent(e) {
+  return <h1>{e.title}</h1>;
+};
 const resourceMap = [
   { resourceId: 1, resourceTitle: 'Board room' },
   { resourceId: 2, resourceTitle: 'Training room' },
@@ -46,7 +52,7 @@ const resourceMap = [
   { resourceId: 4, resourceTitle: 'Meeting room 2' },
 ];
 
-class Dnd extends React.PureComponent {
+class Schedule extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -90,12 +96,31 @@ class Dnd extends React.PureComponent {
     });
   };
 
+  handleSelect = ({ start, end, resourceId }) => {
+    const title = 'add';
+    const { events: eventsData } = this.state;
+    if (title)
+      this.setState({
+        events: [
+          ...eventsData,
+          {
+            start,
+            end,
+            title,
+            resourceId,
+          },
+        ],
+      });
+    console.log(this.state);
+  };
+
   render() {
     const { events: eventsData } = this.state;
     const style = {
       overflow: 'auto',
       backgroundColor: '#fff',
       height: '100vh',
+      padding: '15px',
     };
     return (
       <div style={style}>
@@ -110,11 +135,22 @@ class Dnd extends React.PureComponent {
           resourceTitleAccessor="resourceTitle"
           onEventResize={this.resizeEvent}
           defaultView="day"
+          views={['day']}
           defaultDate={new Date(2018, 0, 29)}
+          popup
+          step={30}
+          timeslots={1}
+          components={{
+            event: EventComponent,
+          }}
+          onSelectEvent={event => console.log(event.title)}
+          onSelectSlot={this.handleSelect}
         />
       </div>
     );
   }
 }
 
-export default Dnd;
+Schedule.propTypes = propTypes;
+
+export default Schedule;

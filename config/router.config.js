@@ -170,10 +170,10 @@ export default [
             ],
           },
           {
-            path: '/demo/gantt',
-            name: 'gantt',
+            path: '/demo/schedule',
+            name: 'schedule',
             hideInMenu: false,
-            component: './List/Gantt',
+            component: './List/Schedule',
           },
           {
             path: '/demo/dnd',
