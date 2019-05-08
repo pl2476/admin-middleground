@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-// import AsyncPaginate from 'react-select-async-paginate';
 // import moment from 'moment';
 import router from 'umi/router';
 import {
@@ -608,20 +607,6 @@ class TableList extends PureComponent {
     } = this.props;
     const clientOptions = data.list.map(d => <Option key={d.userCode}>{d.fullName}</Option>);
 
-    // const defaultAdditional = {
-    //   page: 1,
-    // };
-    // const loadPageOptions = async (q, prevOptions, { page }) => {
-    //   const { options, hasMore } = await loadOptions(q, page);
-    //   return {
-    //     options,
-    //     hasMore,
-
-    //     additional: {
-    //       page: page + 1,
-    //     },
-    //   };
-    // };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -631,26 +616,12 @@ class TableList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            {/* <FormItem label="client">
-              {getFieldDecorator('client')(
-                <AsyncPaginate
-                  additional={defaultAdditional}
-                  // value={value}
-                  loadOptions={loadPageOptions}
-                  onChange={this.onChange}
-                  size="small"
-                  getOptionValue={option => option.id}
-                />
-              )}
-            </FormItem> */}
             <FormItem label="client">
               {getFieldDecorator('client')(
                 <Select
-                  // ref={(input) => { ref = input }}
                   showSearch
                   placeholder="请选择"
                   showArrow={false}
-                  // value={clientValue}
                   filterOption={false}
                   onSearch={this.handleClientSearch}
                   onChange={this.handleChange}
