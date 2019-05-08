@@ -40,6 +40,6 @@ export default {
   'menu.demo.searchtable': '列表',
   'menu.demo.searchtable.index': '搜索列表',
   'menu.demo.searchtable.recorddetail': '详情',
-  'menu.demo.GantDemo1': '任务表1',
-  'menu.demo.GantDemo2': '任务表2',
+  'menu.demo.gantt': '任务表',
+  'menu.demo.dnd': '拖拽',
 };
