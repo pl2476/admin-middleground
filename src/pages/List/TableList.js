@@ -22,7 +22,6 @@ import {
   Steps,
   Radio,
 } from 'antd';
-// import loadOptions from './loadOptions';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -37,8 +36,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-// const statusMap = ['default', 'processing', 'success', 'error'];
-// const status = ['关闭', '运行中', '已上线', '异常'];
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
 });
@@ -52,19 +49,57 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
+  const prefixSelector = form.getFieldDecorator('prefix', {
+    initialValue: '86',
+  })(
+    <Select style={{ width: 70 }}>
+      <Option value="86">+86</Option>
+      <Option value="87">+87</Option>
+    </Select>
+  );
   return (
     <Modal
       destroyOnClose
-      title="新建规则"
+      title="Add"
+      width="1024px"
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onCancel={() => handleModalVisible(true)}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
-        })(<Input placeholder="请输入" />)}
-      </FormItem>
+      <Row gutter={24}>
+        <Col span={12} key={1}>
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="fullName">
+            {form.getFieldDecorator('fullName', {
+              rules: [
+                { required: true, message: 'Please enter at least five characters！', min: 5 },
+              ],
+            })(<Input placeholder="Please input" />)}
+          </FormItem>
+        </Col>
+        <Col span={12} key={2}>
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="email">
+            {form.getFieldDecorator('email', {
+              rules: [
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+                },
+                {
+                  required: true,
+                  message: 'Please input your E-mail!',
+                },
+              ],
+            })(<Input placeholder="Please input" />)}
+          </FormItem>
+        </Col>
+        <Col span={12} key={3}>
+          <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="userPhone">
+            {form.getFieldDecorator('userPhone', {
+              rules: [{ required: true, message: 'Please input your phone number!' }],
+            })(<Input type="phone" addonBefore={prefixSelector} placeholder="Please input" />)}
+          </FormItem>
+        </Col>
+      </Row>
     </Modal>
   );
 });
@@ -444,7 +479,7 @@ class TableList extends PureComponent {
 
   handleModalVisible = flag => {
     this.setState({
-      modalVisible: !!flag,
+      modalVisible: !flag,
     });
   };
 
@@ -481,7 +516,7 @@ class TableList extends PureComponent {
     });
 
     message.success('添加成功');
-    this.handleModalVisible();
+    this.handleModalVisible(true);
   };
 
   handleUpdate = fields => {
