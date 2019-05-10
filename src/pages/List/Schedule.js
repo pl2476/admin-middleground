@@ -166,11 +166,8 @@ class Schedule extends React.PureComponent {
       isAllDay: allDay,
       resourceId,
     };
-    const updatedCounters = {
-      ...counters,
-      [draggedEvent]: counters[draggedEvent] + 1,
-    };
-    this.setState({ draggedEvent: null, counters: updatedCounters });
+    counters.splice(draggedEvent + 0, 1);
+    this.setState({ draggedEvent: null, counters });
     this.newEvent(event);
   };
 
