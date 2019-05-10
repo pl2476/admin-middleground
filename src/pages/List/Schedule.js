@@ -175,7 +175,8 @@ class Schedule extends React.PureComponent {
   };
 
   newEvent(event) {
-    const idList = events.map(a => a.id);
+    const { events: eventsData } = this.state;
+    const idList = eventsData.map(a => a.id);
     const newId = Math.max(...idList) + 1;
     const hour = {
       id: newId,
@@ -186,7 +187,7 @@ class Schedule extends React.PureComponent {
       resourceId: event.resourceId,
     };
     this.setState({
-      events: events.concat([hour]),
+      events: eventsData.concat([hour]),
     });
   }
 
