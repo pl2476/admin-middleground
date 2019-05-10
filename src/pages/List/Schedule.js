@@ -55,32 +55,20 @@ const resourceMap = [
   { resourceId: 4, resourceTitle: 'Meeting room 2' },
 ];
 
-const isType = type => target => Object.prototype.toString.call(target) === `[object ${type}]`;
-console.log(isType('String')('a'));
-function add(a) {
-  let ac = a;
-  function sum(b) {
-    // 使用闭包
-    ac += b; // 累加
-    return sum;
-  }
-  // 重写toString()方法
-  sum.toString = () => ac;
-  return sum; // 返回一个函数
-}
-const arr = [1, 2, 3, [2, [12233, [1, 4, 7]]]];
-const flatArr = target => Array.from(new Set(target.flat(Infinity))).sort((a, b) => a - b);
-console.log(flatArr(arr));
-console.log(add(1)(2), add(1)(2)(4) === 7, typeof add(1)(2)(4), add(1)(2)(4) + 0);
-
 const outData = [
   {
-    id: 1,
-    name: 'outData1',
+    id: '',
+    title: 'outData1',
+    start: null,
+    end: null,
+    resourceId: '',
   },
   {
-    id: 2,
-    name: 'outData2',
+    id: '',
+    title: 'outData2',
+    start: null,
+    end: null,
+    resourceId: '',
   },
 ];
 
@@ -92,6 +80,7 @@ class Schedule extends React.PureComponent {
     this.state = {
       events,
       draggedEvent: null,
+      counters: outData,
     };
 
     this.moveEvent = this.moveEvent.bind(this);
@@ -131,7 +120,8 @@ class Schedule extends React.PureComponent {
     });
   };
 
-  handleSelect = ({ start, end, resourceId }) => {
+  handleSelect = params => {
+    const { start, end, resourceId } = params;
     const title = 'add';
     const { events: eventsData } = this.state;
     if (title)
@@ -166,13 +156,15 @@ class Schedule extends React.PureComponent {
     }
   };
 
-  onDropFromOutside = ({ start, end, allDay }) => {
+  onDropFromOutside = params => {
+    const { start, end, allDay, resourceId } = params;
     const { draggedEvent, counters } = this.state;
     const event = {
-      title: formatName(draggedEvent, counters[draggedEvent]),
+      title: formatName(draggedEvent, counters[draggedEvent].title),
       start,
       end,
       isAllDay: allDay,
+      resourceId,
     };
     const updatedCounters = {
       ...counters,
@@ -181,6 +173,22 @@ class Schedule extends React.PureComponent {
     this.setState({ draggedEvent: null, counters: updatedCounters });
     this.newEvent(event);
   };
+
+  newEvent(event) {
+    const idList = events.map(a => a.id);
+    const newId = Math.max(...idList) + 1;
+    const hour = {
+      id: newId,
+      title: event.title,
+      allDay: event.isAllDay,
+      start: event.start,
+      end: event.end,
+      resourceId: event.resourceId,
+    };
+    this.setState({
+      events: events.concat([hour]),
+    });
+  }
 
   render() {
     const { events: eventsData } = this.state;
@@ -243,10 +251,10 @@ class Schedule extends React.PureComponent {
                     key={index}
                     onDragStart={() => this.handleDragStart(index, item)}
                   >
-                    {item.name}
+                    {item.title}
                   </div>
                 ))}
-                <div
+                {/* <div
                   style={{
                     border: '2px solid gray',
                     borderRadius: '4px',
@@ -258,7 +266,7 @@ class Schedule extends React.PureComponent {
                   onDragStart={() => this.handleDragStart('undroppable')}
                 >
                   Draggable but not for calendar.
-                </div>
+                </div> */}
               </Card>
             </Row>
           </Col>

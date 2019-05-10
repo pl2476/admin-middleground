@@ -88,7 +88,9 @@ var EventContainerWrapper =
       };
 
       _this.handleDropFromOutside = function(point, boundaryBox) {
-        var slotMetrics = _this.props.slotMetrics;
+        var _this$props2 = _this.props,
+          slotMetrics = _this$props2.slotMetrics,
+          resource = _this$props2.resource;
         var start = slotMetrics.closestSlotFromPoint(
           {
             y: point.y,
@@ -101,6 +103,7 @@ var EventContainerWrapper =
           start: start,
           end: slotMetrics.nextSlot(start),
           allDay: false,
+          resourceId: resource,
         });
       };
 
@@ -220,9 +223,9 @@ var EventContainerWrapper =
 
     _proto.handleResize = function handleResize(point, boundaryBox) {
       var start, end;
-      var _this$props2 = this.props,
-        accessors = _this$props2.accessors,
-        slotMetrics = _this$props2.slotMetrics;
+      var _this$props3 = this.props,
+        accessors = _this$props3.accessors,
+        slotMetrics = _this$props3.slotMetrics;
       var _this$context$draggab = this.context.draggable.dragAndDropAction,
         event = _this$context$draggab.event,
         direction = _this$context$draggab.direction;
@@ -240,13 +243,13 @@ var EventContainerWrapper =
     };
 
     _proto.render = function render() {
-      var _this$props3 = this.props,
-        children = _this$props3.children,
-        accessors = _this$props3.accessors,
-        components = _this$props3.components,
-        getters = _this$props3.getters,
-        slotMetrics = _this$props3.slotMetrics,
-        localizer = _this$props3.localizer;
+      var _this$props4 = this.props,
+        children = _this$props4.children,
+        accessors = _this$props4.accessors,
+        components = _this$props4.components,
+        getters = _this$props4.getters,
+        slotMetrics = _this$props4.slotMetrics,
+        localizer = _this$props4.localizer;
       var _this$state = this.state,
         event = _this$state.event,
         top = _this$state.top,
