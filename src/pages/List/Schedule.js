@@ -12,49 +12,12 @@ import style from './Schedule.less';
 const localizer = BigCalendar.momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 console.log(formatMessage);
-const events = [
-  {
-    id: 0,
-    title: 'Board meeting',
-    start: new Date(2018, 0, 29, 9, 0, 0),
-    end: new Date(2018, 0, 29, 13, 0, 0),
-    resourceId: 1,
-  },
-  {
-    id: 1,
-    title: 'MS training',
-    allDay: true,
-    start: new Date(2018, 0, 29, 14, 0, 0),
-    end: new Date(2018, 0, 29, 16, 30, 0),
-    resourceId: 2,
-  },
-  {
-    id: 2,
-    title: 'Team lead meeting',
-    start: new Date(2018, 0, 29, 8, 30, 0),
-    end: new Date(2018, 0, 29, 12, 30, 0),
-    resourceId: 3,
-  },
-  {
-    id: 11,
-    title: 'Birthday Party',
-    start: new Date(2018, 0, 30, 7, 0, 0),
-    end: new Date(2018, 0, 30, 10, 30, 0),
-    resourceId: 4,
-  },
-];
 
 const propTypes = {};
 
 const EventComponent = function EventComponent(e) {
   return <h1>{e.title}</h1>;
 };
-// const resourceMap = [
-//   { resourceId: 1, resourceTitle: 'Board room' },
-//   { resourceId: 2, resourceTitle: 'Training room' },
-//   { resourceId: 3, resourceTitle: 'Meeting room 1' },
-//   { resourceId: 4, resourceTitle: 'Meeting room 2' },
-// ];
 
 const outData = [
   {
@@ -82,7 +45,6 @@ class Schedule extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      events,
       draggedEvent: null,
       counters: outData,
     };
@@ -94,21 +56,18 @@ class Schedule extends React.PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'schedule/resource',
-      payload: {
-        userCode: 1,
-        pageNumber: 1,
-        pageSize: 10,
-      },
+      payload: {},
     });
-    setTimeout(() => {
-      console.log(this.props);
-    }, 3000);
+    dispatch({
+      type: 'schedule/events',
+      payload: {},
+    });
   }
 
   moveEvent = ({ event, start, end, resourceId, isAllDay: droppedOnAllDaySlot }) => {
-    const { events: eventsData } = this.state;
+    const { schedule } = this.props;
 
-    const idx = eventsData.indexOf(event);
+    const idx = schedule.events.indexOf(event);
     let { allDay } = event;
 
     if (!event.allDay && droppedOnAllDaySlot) {
@@ -119,7 +78,7 @@ class Schedule extends React.PureComponent {
 
     const updatedEvent = { ...event, start, end, resourceId, allDay };
 
-    const nextEvents = [...eventsData];
+    const nextEvents = [...schedule.events];
     nextEvents.splice(idx, 1, updatedEvent);
 
     this.setState({
@@ -128,9 +87,9 @@ class Schedule extends React.PureComponent {
   };
 
   resizeEvent = (resizeType, { event, start, end }) => {
-    const { events: eventsData } = this.state;
+    const { schedule } = this.props;
 
-    const nextEvents = eventsData.map(existingEvent =>
+    const nextEvents = schedule.events.map(existingEvent =>
       existingEvent.id === event.id ? { ...existingEvent, start, end } : existingEvent
     );
 
@@ -142,11 +101,11 @@ class Schedule extends React.PureComponent {
   handleSelect = params => {
     const { start, end, resourceId } = params;
     const title = 'add';
-    const { events: eventsData } = this.state;
+    const { schedule } = this.props;
     if (title)
       this.setState({
         events: [
-          ...eventsData,
+          ...schedule.events,
           {
             start,
             end,
@@ -191,8 +150,8 @@ class Schedule extends React.PureComponent {
   };
 
   newEvent(event) {
-    const { events: eventsData } = this.state;
-    const idList = eventsData.map(a => a.id);
+    const { schedule } = this.props;
+    const idList = schedule.events.map(a => a.id);
     const newId = Math.max(...idList) + 1;
     const hour = {
       id: newId,
@@ -203,14 +162,13 @@ class Schedule extends React.PureComponent {
       resourceId: event.resourceId,
     };
     this.setState({
-      events: eventsData.concat([hour]),
+      events: schedule.events.concat([hour]),
     });
   }
 
   render() {
-    const { events: eventsData } = this.state;
     const { schedule } = this.props;
-    const { list: resourceMap } = schedule.data;
+    const { resourceMap, events } = schedule;
     const styles = {
       overflow: 'auto',
       backgroundColor: '#fff',
@@ -224,7 +182,7 @@ class Schedule extends React.PureComponent {
             <DragAndDropCalendar
               selectable
               localizer={localizer}
-              events={eventsData}
+              events={events}
               onEventDrop={this.moveEvent}
               resizable
               resources={resourceMap}
