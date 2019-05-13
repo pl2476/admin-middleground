@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'dva';
 import BigCalendar from '@/tempLib/dist/react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from '@/tempLib/lib/addons/dragAndDrop';
@@ -48,12 +49,12 @@ const propTypes = {};
 const EventComponent = function EventComponent(e) {
   return <h1>{e.title}</h1>;
 };
-const resourceMap = [
-  { resourceId: 1, resourceTitle: 'Board room' },
-  { resourceId: 2, resourceTitle: 'Training room' },
-  { resourceId: 3, resourceTitle: 'Meeting room 1' },
-  { resourceId: 4, resourceTitle: 'Meeting room 2' },
-];
+// const resourceMap = [
+//   { resourceId: 1, resourceTitle: 'Board room' },
+//   { resourceId: 2, resourceTitle: 'Training room' },
+//   { resourceId: 3, resourceTitle: 'Meeting room 1' },
+//   { resourceId: 4, resourceTitle: 'Meeting room 2' },
+// ];
 
 const outData = [
   {
@@ -74,6 +75,9 @@ const outData = [
 
 const formatName = (name, count) => `${name} ID ${count}`;
 
+@connect(({ schedule }) => ({
+  schedule,
+}))
 class Schedule extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -84,6 +88,21 @@ class Schedule extends React.PureComponent {
     };
 
     this.moveEvent = this.moveEvent.bind(this);
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'schedule/resource',
+      payload: {
+        userCode: 1,
+        pageNumber: 1,
+        pageSize: 10,
+      },
+    });
+    setTimeout(() => {
+      console.log(this.props);
+    }, 3000);
   }
 
   moveEvent = ({ event, start, end, resourceId, isAllDay: droppedOnAllDaySlot }) => {
@@ -190,6 +209,8 @@ class Schedule extends React.PureComponent {
 
   render() {
     const { events: eventsData } = this.state;
+    const { schedule } = this.props;
+    const { list: resourceMap } = schedule.data;
     const styles = {
       overflow: 'auto',
       backgroundColor: '#fff',

@@ -1,5 +1,11 @@
-import queryCustoms from '@/services/customs';
 import { notification } from 'antd';
+
+const resourceMap = [
+  { resourceId: 1, resourceTitle: 'Board room' },
+  { resourceId: 2, resourceTitle: 'Training room' },
+  { resourceId: 3, resourceTitle: 'Meeting room 1' },
+  { resourceId: 4, resourceTitle: 'Meeting room 2' },
+];
 
 export default {
   namespace: 'schedule',
@@ -12,23 +18,17 @@ export default {
   },
 
   effects: {
-    *list({ payload }, { call, put, select }) {
-      const oldData = yield select(state => state.client.data);
-      const res = yield call(queryCustoms, payload);
-      if (res.code === 200) {
-        let { data } = res;
-        if (payload.pageNumber > 1) {
-          data = [...oldData.list, ...data];
-        }
-        console.log('client', data);
+    *resource({ payload }, { put }) {
+      setTimeout(() => {}, 1000);
+      if (resourceMap.length > 0 && payload.pageSize > 0) {
         yield put({
-          type: 'saveClient',
+          type: 'saveResourceMap',
           payload: {
-            list: data,
+            list: resourceMap,
             pagination: {
-              pageSize: res.pageSize,
-              total: res.totalRecords,
-              current: res.pageNumber,
+              pageSize: 10,
+              total: 4,
+              current: 1,
             },
           },
         });
@@ -43,7 +43,7 @@ export default {
   },
 
   reducers: {
-    saveClient(state, action) {
+    saveResourceMap(state, action) {
       return {
         ...state,
         data: action.payload,
