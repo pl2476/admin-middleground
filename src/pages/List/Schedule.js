@@ -65,7 +65,7 @@ class Schedule extends React.PureComponent {
   }
 
   moveEvent = ({ event, start, end, resourceId, isAllDay: droppedOnAllDaySlot }) => {
-    const { schedule } = this.props;
+    const { schedule, dispatch } = this.props;
 
     const idx = schedule.events.indexOf(event);
     let { allDay } = event;
@@ -81,40 +81,48 @@ class Schedule extends React.PureComponent {
     const nextEvents = [...schedule.events];
     nextEvents.splice(idx, 1, updatedEvent);
 
-    this.setState({
-      events: nextEvents,
+    dispatch({
+      type: 'schedule/refresh',
+      payload: {
+        events: nextEvents,
+      },
     });
   };
 
   resizeEvent = (resizeType, { event, start, end }) => {
-    const { schedule } = this.props;
+    const { schedule, dispatch } = this.props;
 
     const nextEvents = schedule.events.map(existingEvent =>
       existingEvent.id === event.id ? { ...existingEvent, start, end } : existingEvent
     );
 
-    this.setState({
-      events: nextEvents,
+    dispatch({
+      type: 'schedule/refresh',
+      payload: {
+        events: nextEvents,
+      },
     });
   };
 
   handleSelect = params => {
     const { start, end, resourceId } = params;
     const title = 'add';
-    const { schedule } = this.props;
+    const { dispatch, schedule } = this.props;
     if (title)
-      this.setState({
-        events: [
-          ...schedule.events,
-          {
-            start,
-            end,
-            title,
-            resourceId,
-          },
-        ],
+      dispatch({
+        type: 'schedule/refresh',
+        payload: {
+          events: [
+            ...schedule.events,
+            {
+              start,
+              end,
+              title,
+              resourceId,
+            },
+          ],
+        },
       });
-    console.log(this.state);
   };
 
   onPanelChange = (value, mode) => {
@@ -137,6 +145,7 @@ class Schedule extends React.PureComponent {
   onDropFromOutside = params => {
     const { start, end, allDay, resourceId } = params;
     const { draggedEvent, counters } = this.state;
+    const { dispatch, schedule } = this.props;
     const event = {
       title: formatName(draggedEvent, counters[draggedEvent].title),
       start,
@@ -146,11 +155,24 @@ class Schedule extends React.PureComponent {
     };
     counters.splice(draggedEvent + 0, 1);
     this.setState({ draggedEvent: null, counters });
-    this.newEvent(event);
+    const { events } = schedule;
+    events.push(event);
+    // dispatch({
+    //   type: 'schedule/refresh',
+    //   payload: {
+    //     event: events
+    //   },
+    // });
+    dispatch({
+      type: 'schedule/add',
+      payload: {
+        event,
+      },
+    });
   };
 
   newEvent(event) {
-    const { schedule } = this.props;
+    const { schedule, dispatch } = this.props;
     const idList = schedule.events.map(a => a.id);
     const newId = Math.max(...idList) + 1;
     const hour = {
@@ -161,8 +183,11 @@ class Schedule extends React.PureComponent {
       end: event.end,
       resourceId: event.resourceId,
     };
-    this.setState({
-      events: schedule.events.concat([hour]),
+    dispatch({
+      type: 'schedule/add',
+      payload: {
+        event: hour,
+      },
     });
   }
 

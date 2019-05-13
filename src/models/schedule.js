@@ -52,7 +52,7 @@ export default {
       setTimeout(() => {}, 1000);
       if (resourceMap.length > 0 && payload) {
         yield put({
-          type: 'saveResourceMap',
+          type: 'save',
           payload: {
             resourceMap,
           },
@@ -69,7 +69,7 @@ export default {
       setTimeout(() => {}, 1000);
       if (events.length > 0 && payload) {
         yield put({
-          type: 'saveEvents',
+          type: 'save',
           payload: {
             events,
           },
@@ -82,16 +82,44 @@ export default {
         });
       }
     },
+    *add({ payload }, { put, select }) {
+      setTimeout(() => {}, 1000);
+      const eventsData = yield select(state => state.schedule.events);
+      if (payload && payload.event) {
+        // eventsData.push(payload.event)
+        yield put({
+          type: 'save',
+          payload: {
+            events: eventsData,
+          },
+        });
+      } else {
+        notification.error({
+          message: 'error',
+          description: 'error',
+          onClick: () => {},
+        });
+      }
+    },
+    *refresh({ payload }, { put }) {
+      setTimeout(() => {}, 1000);
+      if (payload) {
+        yield put({
+          type: 'save',
+          payload,
+        });
+      } else {
+        notification.error({
+          message: 'error',
+          description: 'error',
+          onClick: () => {},
+        });
+      }
+    },
   },
 
   reducers: {
-    saveResourceMap(state, action) {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    },
-    saveEvents(state, action) {
+    save(state, action) {
       return {
         ...state,
         ...action.payload,
