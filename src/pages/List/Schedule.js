@@ -47,6 +47,12 @@ class Schedule extends React.PureComponent {
     this.state = {
       draggedEvent: null,
       counters: outData,
+      min: moment()
+        .startOf('day')
+        .add(8, 'hours'),
+      max: moment()
+        .startOf('day')
+        .add(18, 'hours'),
     };
 
     this.moveEvent = this.moveEvent.bind(this);
@@ -194,6 +200,7 @@ class Schedule extends React.PureComponent {
   render() {
     const { schedule } = this.props;
     const { resourceMap, events } = schedule;
+    const { min, max } = this.state;
     const styles = {
       overflow: 'auto',
       backgroundColor: '#fff',
@@ -216,7 +223,7 @@ class Schedule extends React.PureComponent {
               onEventResize={this.resizeEvent}
               defaultView="day"
               views={['day']}
-              defaultDate={new Date(2018, 0, 29)}
+              defaultDate={new Date(2019, 4, 14)}
               popup
               step={30}
               timeslots={1}
@@ -225,9 +232,10 @@ class Schedule extends React.PureComponent {
               }}
               onSelectEvent={event => console.log(event.title)}
               onSelectSlot={this.handleSelect}
-              onD
               onDropFromOutside={this.onDropFromOutside}
               onDragOver={this.customOnDragOver}
+              min={min.toDate()}
+              max={max.toDate()}
             />
           </Col>
           <Col span={6}>
