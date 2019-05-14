@@ -358,6 +358,11 @@ class TableList extends PureComponent {
     },
   ];
 
+  constructor(props) {
+    super(props);
+    this.onPopupScroll = this.onPopupScroll.bind(this);
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -607,8 +612,7 @@ class TableList extends PureComponent {
                   filterOption={false}
                   onSearch={this.handleClientSearch}
                   onChange={this.handleChange}
-                  // eslint-disable-next-line react/jsx-no-bind
-                  onPopupScroll={this.onPopupScroll.bind(this)}
+                  onPopupScroll={this.onPopupScroll}
                   notFoundContent={null}
                   style={{ width: '100%' }}
                 >
@@ -660,8 +664,7 @@ class TableList extends PureComponent {
                   filterOption={false}
                   onSearch={this.handleClientSearch}
                   onChange={this.handleChange}
-                  // eslint-disable-next-line react/jsx-no-bind
-                  onPopupScroll={this.onPopupScroll.bind(this)}
+                  onPopupScroll={this.onPopupScroll}
                   notFoundContent={null}
                   style={{ width: '100%' }}
                 >
