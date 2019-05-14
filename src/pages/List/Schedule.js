@@ -4,14 +4,12 @@ import BigCalendar from '@/tempLib/dist/react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from '@/tempLib/lib/addons/dragAndDrop';
 import { Row, Col, Calendar, Card } from 'antd';
-import { formatMessage } from 'umi/locale';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import style from './Schedule.less';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
-console.log(formatMessage);
 
 const propTypes = {};
 
@@ -53,9 +51,11 @@ class Schedule extends React.PureComponent {
       max: moment()
         .startOf('day')
         .add(18, 'hours'),
+      currentTime: new Date(),
     };
 
     this.moveEvent = this.moveEvent.bind(this);
+    this.dateOnSelect = this.dateOnSelect.bind(this);
   }
 
   componentDidMount() {
@@ -131,8 +131,12 @@ class Schedule extends React.PureComponent {
       });
   };
 
-  onPanelChange = (value, mode) => {
-    console.log(value, mode);
+  dateOnSelect = value => {
+    this.setState({ currentTime: new Date(value.format('YYYY-MM-DD')) });
+  };
+
+  onNavigate = value => {
+    this.setState({ currentTime: new Date(value) });
   };
 
   handleDragStart = (name, count) => {
@@ -200,18 +204,35 @@ class Schedule extends React.PureComponent {
   render() {
     const { schedule } = this.props;
     const { resourceMap, events } = schedule;
-    const { min, max } = this.state;
+    const { min, max, currentTime } = this.state;
     const styles = {
       overflow: 'auto',
       backgroundColor: '#fff',
       height: '100vh',
       padding: '15px',
     };
+    const formats = {
+      // dateFormat: 'dd',
+
+      // dayFormat: (date, culture, local) =>
+      // local.format(date, 'DD', culture),
+
+      dayHeaderFormat: (date, culture, local) => local.format(date, 'dddd MMM Do', culture),
+
+      dayRangeHeaderFormat: ({ start, end }, culture, local) =>
+        `${local.format(start, { date: 'short' }, culture)} — ${local.format(
+          end,
+          { date: 'short' },
+          culture
+        )}`,
+    };
     return (
       <div style={styles}>
         <Row gutter={15}>
           <Col span={18}>
             <DragAndDropCalendar
+              formats={formats}
+              className={style.dragCalendar}
               selectable
               localizer={localizer}
               events={events}
@@ -223,8 +244,11 @@ class Schedule extends React.PureComponent {
               onEventResize={this.resizeEvent}
               defaultView="day"
               views={['day']}
-              defaultDate={new Date(2019, 4, 14)}
+              defaultDate={new Date()}
+              date={currentTime}
+              onNavigate={this.onNavigate}
               popup
+              toolbar
               step={30}
               timeslots={1}
               components={{
@@ -244,7 +268,7 @@ class Schedule extends React.PureComponent {
                 className={style.calendar}
                 fullscreen={false}
                 mode="month"
-                onPanelChange={this.onPanelChange}
+                onSelect={this.dateOnSelect}
               />
             </Row>
             <Row>
