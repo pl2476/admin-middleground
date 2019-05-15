@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
-import BigCalendar from '@/tempLib/dist/react-big-calendar';
+import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-import withDragAndDrop from '@/tempLib/lib/addons/dragAndDrop';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { Row, Col, Calendar, Card } from 'antd';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -153,7 +153,7 @@ class Schedule extends React.PureComponent {
   };
 
   onDropFromOutside = params => {
-    const { start, end, allDay, resourceId } = params;
+    const { start, end, allDay, resource } = params;
     const { draggedEvent, counters } = this.state;
     const { dispatch, schedule } = this.props;
     const event = {
@@ -161,7 +161,7 @@ class Schedule extends React.PureComponent {
       start,
       end,
       isAllDay: allDay,
-      resourceId,
+      resourceId: resource,
     };
     counters.splice(draggedEvent + 0, 1);
     this.setState({ draggedEvent: null, counters });
