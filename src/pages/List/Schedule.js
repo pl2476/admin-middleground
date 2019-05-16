@@ -147,7 +147,6 @@ class Schedule extends React.PureComponent {
   customOnDragOver = event => {
     const { draggedEvent } = this.state;
     if (draggedEvent !== 'undroppable') {
-      console.log('preventDefault');
       event.preventDefault();
     }
   };
