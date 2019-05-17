@@ -180,6 +180,15 @@ class Schedule extends React.PureComponent {
     });
   };
 
+  eventPropGetter = event => {
+    if (event.style) {
+      return {
+        style: event.style,
+      };
+    }
+    return {};
+  };
+
   newEvent(event) {
     const { schedule, dispatch } = this.props;
     const idList = schedule.events.map(a => a.id);
@@ -259,6 +268,7 @@ class Schedule extends React.PureComponent {
               onDragOver={this.customOnDragOver}
               min={min.toDate()}
               max={max.toDate()}
+              eventPropGetter={this.eventPropGetter}
             />
           </Col>
           <Col span={6}>

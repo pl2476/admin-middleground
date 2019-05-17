@@ -31,6 +31,17 @@ const events = [
     resourceId: 3,
   },
   {
+    id: 3,
+    title: 'Red level',
+    start: new Date(2019, 4, 17, 9, 30, 0),
+    end: new Date(2019, 4, 17, 12, 30, 0),
+    resourceId: 4,
+    style: {
+      backgroundColor: 'red',
+      borderColor: 'red',
+    },
+  },
+  {
     id: 11,
     title: 'Birthday Party',
     start: new Date(2019, 4, 15, 7, 0, 0),
