@@ -283,6 +283,7 @@ class Schedule extends React.PureComponent {
                 className={style.calendar}
                 fullscreen={false}
                 mode="month"
+                value={moment(currentTime)}
                 onSelect={this.dateOnSelect}
               />
             </Row>
