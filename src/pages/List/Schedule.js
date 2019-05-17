@@ -31,6 +31,10 @@ const outData = [
     start: null,
     end: null,
     resourceId: '',
+    style: {
+      backgroundColor: 'green',
+      borderColor: 'green',
+    },
   },
 ];
 
@@ -152,7 +156,8 @@ class Schedule extends React.PureComponent {
   };
 
   onDropFromOutside = params => {
-    const { start, end, allDay, resource } = params;
+    // cusStyle is temporarily unavailable
+    const { start, end, allDay, resource, style: cusStyle } = params;
     const { draggedEvent, counters } = this.state;
     const { dispatch, schedule } = this.props;
     const event = {
@@ -161,6 +166,7 @@ class Schedule extends React.PureComponent {
       end,
       isAllDay: allDay,
       resourceId: resource,
+      style: cusStyle,
     };
     counters.splice(draggedEvent + 0, 1);
     this.setState({ draggedEvent: null, counters });
