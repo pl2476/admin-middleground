@@ -42,4 +42,5 @@ export default {
   'menu.demo.searchtable.recorddetail': '详情',
   'menu.demo.schedule': '任务表',
   'menu.demo.dnd': '拖拽',
+  'menu.demo.booking': '搜索列表',
 };

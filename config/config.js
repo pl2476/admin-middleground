@@ -113,7 +113,7 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/proxy': {
-      target: 'http://localhost:8080/',
+      target: 'http://192.168.31.74',
       changeOrigin: true,
       pathRewrite: { '^/proxy': '' },
     },

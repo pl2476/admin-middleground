@@ -360,6 +360,12 @@ const menuData = [
         hideInMenu: false,
         component: './List/Dnd',
       },
+      {
+        path: '/demo/booking',
+        name: 'booking',
+        hideInMenu: false,
+        component: './Booking/BookingList',
+      },
     ],
   },
 ];

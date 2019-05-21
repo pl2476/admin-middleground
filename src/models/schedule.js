@@ -32,13 +32,13 @@ const events = [
   },
   {
     id: 3,
-    title: 'Red level',
+    title: 'High level',
     start: new Date(2019, 4, 17, 9, 30, 0),
     end: new Date(2019, 4, 17, 12, 30, 0),
     resourceId: 4,
     style: {
-      backgroundColor: 'red',
-      borderColor: 'red',
+      backgroundColor: 'orange',
+      borderColor: 'orange',
     },
   },
   {
