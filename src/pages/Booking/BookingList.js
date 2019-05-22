@@ -652,9 +652,21 @@ class TableList extends PureComponent {
 
   renderAdvancedForm() {
     const {
-      client: { data },
       form: { getFieldDecorator },
     } = this.props;
+
+    let { client } = this.props;
+
+    if (!client) {
+      client = {
+        data: {
+          list: [],
+        },
+      };
+    }
+
+    const { data } = client;
+
     const clientOptions = data.list.map(d => <Option key={d.userCode}>{d.fullName}</Option>);
 
     return (
