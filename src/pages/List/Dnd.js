@@ -17,9 +17,21 @@ class Dnd extends PureComponent {
 
   PrefixInteger = (num, length) => (Array(length).join('0') + num).slice(-length);
 
-  drop = (item, e) => {
+  onDrop = (item, e) => {
+    // e.stopPropagation();
+    // e.preventDefault();
     // e.dataTransfer.getData('text/plain');
-    console.log('drop', item, e);
+    console.log('onDrop', item, e);
+  };
+
+  dragEnter = (item, e) => {
+    e.preventDefault();
+    // console.log('dragEnter', item, e);
+  };
+
+  dragOver = (item, e) => {
+    e.preventDefault();
+    // console.log('dragOver', item, e);
   };
 
   render() {
@@ -40,21 +52,21 @@ class Dnd extends PureComponent {
     const items = [
       {
         id: 1,
-        startTime: '03:30',
+        startTime: '00:30',
         duration: 60,
         top: '30px',
         left: '50px',
       },
       {
         id: 2,
-        startTime: '03:30',
+        startTime: '01:00',
         duration: 30,
         top: '60px',
         left: '150px',
       },
       {
         id: 3,
-        startTime: '03:30',
+        startTime: '02:00',
         duration: 90,
         top: '120px',
         left: '250px',
@@ -67,7 +79,13 @@ class Dnd extends PureComponent {
       </div>
     ));
     const contentBoxItems = rowList.map(item => (
-      <div key={item} className={style.rowItems} onDrop={this.drop.bind(this, item)} />
+      <div
+        key={item}
+        className={style.rowItems}
+        onDrop={this.onDrop.bind(this, item)}
+        onDragEnter={this.dragEnter.bind(this, item)}
+        onDragOver={this.dragOver.bind(this, item)}
+      />
     ));
     const contentBox = colList.map(item => (
       <div key={item} className={style.colItems}>
@@ -91,6 +109,7 @@ class Dnd extends PureComponent {
         {item.id}
       </div>
     ));
+
     return (
       <div className={style.dnd}>
         <div className={style.box}>
