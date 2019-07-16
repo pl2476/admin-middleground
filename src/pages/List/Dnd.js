@@ -55,24 +55,29 @@ class Dnd extends PureComponent {
         startTime: '00:30',
         duration: 60,
         top: '30px',
-        left: '50px',
+        left: '70px',
       },
       {
         id: 2,
         startTime: '01:00',
         duration: 30,
         top: '60px',
-        left: '150px',
+        left: '220px',
       },
       {
         id: 3,
         startTime: '02:00',
         duration: 90,
         top: '120px',
-        left: '250px',
+        left: '370px',
       },
     ];
-
+    const colTitleList = ['', ...colList];
+    const colTitle = colTitleList.map((item, index) => (
+      <div key={item} className={index !== 0 ? style.colTitleItems : style.firstColTitle}>
+        {item}
+      </div>
+    ));
     const rowItems = rowList.map(item => (
       <div key={item} className={style.rowItems}>
         {item}
@@ -111,12 +116,15 @@ class Dnd extends PureComponent {
     ));
 
     return (
-      <div className={style.dnd}>
-        <div className={style.box}>
-          <div className={style.firstCol}>{rowItems}</div>
-          {contentBox}
+      <div className={style.container}>
+        <div className={style.colTitle}>{colTitle}</div>
+        <div className={style.dnd}>
+          <div className={style.box}>
+            <div className={style.firstCol}>{rowItems}</div>
+            {contentBox}
+          </div>
+          {contentItems}
         </div>
-        {contentItems}
       </div>
     );
   }
