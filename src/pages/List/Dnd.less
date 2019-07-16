@@ -1,29 +1,39 @@
 .container {
+  background: #fff;
   .colTitle {
     width: 100%;
     height: 30px;
     border: 1px solid #aaa;
     border-bottom: 0;
     display: flex;
+    position: sticky;
+    top: 0;
+
+    justify-content: flex-start;
+    margin-left: 70px;
     .colTitleItems {
+      background: #fff;
+      flex-grow: 0;
+      flex-shrink: 0;
       width: 150px;
       height: 30px;
       line-height: 30px;
       text-align: center;
       border-right: 1px solid #aaa;
     }
-    .firstColTitle {
-      width: 70px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      border-right: 1px solid #aaa;
-    }
+    // .firstColTitle {
+    //   flex-grow: 0;
+    //   flex-shrink: 0;
+    //   width: 70px;
+    //   height: 30px;
+    //   line-height: 30px;
+    //   text-align: center;
+    //   border-right: 1px solid #aaa;
+    // }
   }
   .dnd {
     width: 100%;
     height: 100%;
-    position: relative;
     .rowItems {
       height: 30px;
       line-height: 30px;
@@ -49,14 +59,23 @@
       height: 100%;
       border: 1px solid #aaa;
       overflow: auto;
+      position: relative;
       .firstCol {
+        position: sticky;
+        left: 0;
+        background: #fff;
+        z-index: 2;
+        flex-grow: 0;
+        flex-shrink: 0;
         width: 70px;
-        height: 100%;
+        height: auto;
         border-right: 1px solid #aaa;
       }
       .colItems {
+        flex-grow: 0;
+        flex-shrink: 0;
         width: 150px;
-        height: 100%;
+        height: auto;
         border-right: 1px solid #aaa;
       }
     }

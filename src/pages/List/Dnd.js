@@ -35,7 +35,7 @@ class Dnd extends PureComponent {
   };
 
   render() {
-    const colList = ['a', 'b', 'c', 'd', 'e', 'f'];
+    const colList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
     const rowList = [];
     let hour = 0;
     let min = '';
@@ -72,9 +72,8 @@ class Dnd extends PureComponent {
         left: '370px',
       },
     ];
-    const colTitleList = ['', ...colList];
-    const colTitle = colTitleList.map((item, index) => (
-      <div key={item} className={index !== 0 ? style.colTitleItems : style.firstColTitle}>
+    const colTitle = colList.map(item => (
+      <div key={item} className={style.colTitleItems}>
         {item}
       </div>
     ));
@@ -103,6 +102,7 @@ class Dnd extends PureComponent {
         className={style.contentItem}
         style={{
           backgroundColor: index % 2 === 0 ? '#4d9a77' : '#b6d051',
+          opacity: 0.8,
           height: `${item.duration}px`,
           lineHeight: `${item.duration}px`,
           top: item.top,
@@ -122,8 +122,8 @@ class Dnd extends PureComponent {
           <div className={style.box}>
             <div className={style.firstCol}>{rowItems}</div>
             {contentBox}
+            {contentItems}
           </div>
-          {contentItems}
         </div>
       </div>
     );
