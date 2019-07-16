@@ -38,7 +38,7 @@
       height: 30px;
       line-height: 30px;
       text-align: center;
-      border-bottom: 1px dotted #aaa;
+      // border-bottom: 1px dotted #aaa;
     }
     .rowItems:last-child {
       border-bottom: 0;
@@ -77,6 +77,14 @@
         width: 150px;
         height: auto;
         border-right: 1px solid #aaa;
+        .rowItems {
+          border-bottom: 1px dotted #aaa;
+        }
+      }
+      .colItems .rowItems:first-child {
+        position: sticky;
+        top: 0;
+        border-bottom: 1px solid #aaa;
       }
     }
   }

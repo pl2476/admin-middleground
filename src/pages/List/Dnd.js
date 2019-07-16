@@ -36,7 +36,7 @@ class Dnd extends PureComponent {
 
   render() {
     const colList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
-    const rowList = [];
+    const rowList = [''];
     let hour = 0;
     let min = '';
     for (let i = 0; i < 48; i += 1) {
@@ -72,28 +72,46 @@ class Dnd extends PureComponent {
         left: '370px',
       },
     ];
-    const colTitle = colList.map(item => (
-      <div key={item} className={style.colTitleItems}>
-        {item}
-      </div>
-    ));
-    const rowItems = rowList.map(item => (
-      <div key={item} className={style.rowItems}>
-        {item}
-      </div>
-    ));
-    const contentBoxItems = rowList.map(item => (
+    // const colTitle = colList.map(item => (
+    //   <div key={item} className={style.colTitleItems}>
+    //     {item}
+    //   </div>
+    // ));
+    const rowItems = rowList.map((item, index) => (
       <div
         key={item}
         className={style.rowItems}
-        onDrop={this.onDrop.bind(this, item)}
-        onDragEnter={this.dragEnter.bind(this, item)}
-        onDragOver={this.dragOver.bind(this, item)}
-      />
+        style={{
+          borderBottom: index === 0 ? '1px solid #aaa' : '1px dotted #aaa',
+        }}
+      >
+        {item}
+      </div>
     ));
+    // const contentBoxItems = rowList.map( (item, index) => (
+    //   <div
+    //     key={item}
+    //     className={style.rowItems}
+    //     onDrop={this.onDrop.bind(this, item)}
+    //     onDragEnter={this.dragEnter.bind(this, item)}
+    //     onDragOver={this.dragOver.bind(this, item)}
+    //   >
+    //     {index === 0 ? item : ''}
+    //   </div>
+    // ));
     const contentBox = colList.map(item => (
       <div key={item} className={style.colItems}>
-        {contentBoxItems}
+        {rowList.map((i, index) => (
+          <div
+            key={i}
+            className={style.rowItems}
+            onDrop={this.onDrop.bind(this, i)}
+            onDragEnter={this.dragEnter.bind(this, i)}
+            onDragOver={this.dragOver.bind(this, i)}
+          >
+            {index === 0 ? item : ''}
+          </div>
+        ))}
       </div>
     ));
     const contentItems = items.map((item, index) => (
@@ -117,7 +135,7 @@ class Dnd extends PureComponent {
 
     return (
       <div className={style.container}>
-        <div className={style.colTitle}>{colTitle}</div>
+        {/* <div className={style.colTitle}>{colTitle}</div> */}
         <div className={style.dnd}>
           <div className={style.box}>
             <div className={style.firstCol}>{rowItems}</div>
