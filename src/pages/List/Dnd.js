@@ -72,11 +72,11 @@ class Dnd extends PureComponent {
         left: '370px',
       },
     ];
-    // const colTitle = colList.map(item => (
-    //   <div key={item} className={style.colTitleItems}>
-    //     {item}
-    //   </div>
-    // ));
+    const colTitle = colList.map(item => (
+      <div key={item} className={style.colTitleItems}>
+        {item}
+      </div>
+    ));
     const rowItems = rowList.map(item => (
       <div
         key={item}
@@ -135,7 +135,7 @@ class Dnd extends PureComponent {
 
     return (
       <div className={style.container}>
-        {/* <div className={style.colTitle}>{colTitle}</div> */}
+        <div className={style.colTitle}>{colTitle}</div>
         <div className={style.dnd}>
           <div className={style.box}>
             <div className={style.firstCol}>{rowItems}</div>
