@@ -77,13 +77,13 @@ class Dnd extends PureComponent {
     //     {item}
     //   </div>
     // ));
-    const rowItems = rowList.map((item, index) => (
+    const rowItems = rowList.map(item => (
       <div
         key={item}
         className={style.rowItems}
-        style={{
-          borderBottom: index === 0 ? '1px solid #aaa' : '1px dotted #aaa',
-        }}
+        // style={{
+        //   borderBottom: index === 0 ? '1px solid #aaa' : '1px dotted #aaa',
+        // }}
       >
         {item}
       </div>
