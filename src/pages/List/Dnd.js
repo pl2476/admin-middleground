@@ -4,6 +4,12 @@ import style from './Dnd.less';
 class Dnd extends PureComponent {
   state = {};
 
+  constructor(props) {
+    super(props);
+    this.boxRef = React.createRef();
+    this.colTitleRef = React.createRef();
+  }
+
   componentDidMount() {
     // const { dispatch } = this.props;
     // console.log('componentDidMount', this.props, dispatch, this.state);
@@ -32,6 +38,10 @@ class Dnd extends PureComponent {
   dragOver = (item, e) => {
     e.preventDefault();
     // console.log('dragOver', item, e);
+  };
+
+  boxScroll = () => {
+    this.colTitleRef.current.scrollLeft = this.boxRef.current.scrollLeft;
   };
 
   render() {
@@ -72,7 +82,8 @@ class Dnd extends PureComponent {
         left: '370px',
       },
     ];
-    const colTitle = colList.map(item => (
+    const colTitleList = ['', ...colList];
+    const colTitle = colTitleList.map(item => (
       <div key={item} className={style.colTitleItems}>
         {item}
       </div>
@@ -135,9 +146,11 @@ class Dnd extends PureComponent {
 
     return (
       <div className={style.container}>
-        <div className={style.colTitle}>{colTitle}</div>
+        <div className={style.colTitle} ref={this.colTitleRef}>
+          {colTitle}
+        </div>
         <div className={style.dnd}>
-          <div className={style.box}>
+          <div ref={this.boxRef} className={style.box} onScrollCapture={this.boxScroll.bind(this)}>
             <div className={style.firstCol}>{rowItems}</div>
             {contentBox}
             {contentItems}
