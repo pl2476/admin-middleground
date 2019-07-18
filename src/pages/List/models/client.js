@@ -20,7 +20,6 @@ export default {
         if (payload.pageNumber > 1) {
           data = [...oldData.list, ...data];
         }
-        console.log('client', data);
         yield put({
           type: 'saveClient',
           payload: {

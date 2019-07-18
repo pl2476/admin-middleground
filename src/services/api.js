@@ -128,3 +128,7 @@ export async function getFakeCaptcha(mobile) {
 export async function getMenuData() {
   return request('/api/getMenuData');
 }
+
+export async function getTimes(params) {
+  return request(`/api/getTimes?${stringify(params)}`);
+}
