@@ -65,12 +65,22 @@ class Dnd extends PureComponent {
 
   dragEnter = (item, e) => {
     e.preventDefault();
-    // console.log('dragEnter', item, e);
+    if (e.target.children[0] && e.target.children[0].hasAttribute('class')) {
+      e.target.children[0].removeAttribute('class');
+    }
   };
 
   dragOver = (item, e) => {
     e.preventDefault();
-    // console.log('dragOver', item, e);
+    // e.persist();
+  };
+
+  dragLeave = (item, e) => {
+    e.preventDefault();
+    // e.persist();
+    if (e.target.children[0] && !e.target.children[0].hasAttribute('class')) {
+      e.target.children[0].setAttribute('class', style.rowItem);
+    }
   };
 
   boxScroll = () => {
@@ -80,7 +90,6 @@ class Dnd extends PureComponent {
   render() {
     const { colList, items } = this.state;
     const { dnd } = this.props;
-    console.log(dnd);
     const colTitleList = ['', ...colList];
     const colTitle = colTitleList.map(item => (
       <div key={item} className={style.colTitleItems}>
@@ -88,7 +97,7 @@ class Dnd extends PureComponent {
       </div>
     ));
     let rowList = [];
-    if (dnd.times && dnd.times.list && dnd.times.list.lenght > 0) {
+    if (dnd.times && dnd.times.list && dnd.times.list.length > 0) {
       rowList = dnd.times.list;
     }
     const rowItems = rowList.map(item => (
@@ -110,15 +119,16 @@ class Dnd extends PureComponent {
     // Nesting
     const contentBox = colList.map(item => (
       <div key={item} className={style.colItems}>
-        {rowList.map((i, index) => (
+        {rowList.map(i => (
           <div
             key={i.id}
             className={style.rowItems}
             onDrop={this.onDrop.bind(this, i)}
             onDragEnter={this.dragEnter.bind(this, i)}
             onDragOver={this.dragOver.bind(this, i)}
+            onDragLeave={this.dragLeave.bind(this, i)}
           >
-            {index === 0 ? item : ''}
+            <div className={style.rowItem}>{`${i.time} / ${item}`}</div>
           </div>
         ))}
       </div>

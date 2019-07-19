@@ -101,6 +101,12 @@
         border-right: 1px solid #aaa;
         .rowItems {
           border-bottom: 1px dotted #aaa;
+          .rowItem {
+            display: none;
+          }
+        }
+        .rowItems:hover > .rowItem {
+          display: block;
         }
         .rowItems:first-child {
           position: sticky;
