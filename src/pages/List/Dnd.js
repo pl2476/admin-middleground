@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-// import { prefixInteger } from '@/utils/utils';
+import { throttle } from 'underscore';
 import style from './Dnd.less';
 
 @connect(({ dnd }) => ({
@@ -40,6 +40,9 @@ class Dnd extends PureComponent {
       // rowList,
       items,
     };
+    this.dragEnterThrottle = throttle(this.dragEnter, 1000);
+    this.dragOverThrottle = throttle(this.dragOver, 1000);
+    this.dragLeaveThrottle = throttle(this.dragOver, 1000);
   }
 
   componentDidMount() {
@@ -49,6 +52,20 @@ class Dnd extends PureComponent {
       payload: {},
     });
   }
+
+  hideBoxItem = e => {
+    if (e.target && e.target.children[0] && e.target.children[0].hasAttribute('class')) {
+      e.target.children[0].removeAttribute('class');
+    }
+    console.log('hideBoxItem');
+  };
+
+  showBoxItem = e => {
+    if (e.target && e.target.children[0] && !e.target.children[0].hasAttribute('class')) {
+      e.target.children[0].setAttribute('class', style.rowItem);
+    }
+    console.log('showBoxItem');
+  };
 
   dragStart = (item, e) => {
     // e.dataTransfer.setData('text/plain', item.id);
@@ -64,23 +81,20 @@ class Dnd extends PureComponent {
   };
 
   dragEnter = (item, e) => {
+    e.persist();
     e.preventDefault();
-    if (e.target.children[0] && e.target.children[0].hasAttribute('class')) {
-      e.target.children[0].removeAttribute('class');
-    }
+    this.hideBoxItem(e);
   };
 
   dragOver = (item, e) => {
+    e.persist();
     e.preventDefault();
-    // e.persist();
   };
 
   dragLeave = (item, e) => {
+    e.persist();
     e.preventDefault();
-    // e.persist();
-    if (e.target.children[0] && !e.target.children[0].hasAttribute('class')) {
-      e.target.children[0].setAttribute('class', style.rowItem);
-    }
+    this.showBoxItem(e);
   };
 
   boxScroll = () => {
@@ -124,9 +138,9 @@ class Dnd extends PureComponent {
             key={i.id}
             className={style.rowItems}
             onDrop={this.onDrop.bind(this, i)}
-            onDragEnter={this.dragEnter.bind(this, i)}
-            onDragOver={this.dragOver.bind(this, i)}
-            onDragLeave={this.dragLeave.bind(this, i)}
+            onDragEnter={this.dragEnterThrottle.bind(this, i)}
+            onDragOver={this.dragOverThrottle.bind(this, i)}
+            onDragLeave={this.dragLeaveThrottle.bind(this, i)}
           >
             <div className={style.rowItem}>{`${i.time} / ${item}`}</div>
           </div>
