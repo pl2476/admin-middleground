@@ -68,7 +68,7 @@ class Dnd extends PureComponent {
   };
 
   dragStart = (item, e) => {
-    // e.dataTransfer.setData('text/plain', item.id);
+    e.dataTransfer.setData('text/plain', item.id);
     // e.dataTransfer.effectAllowed = "linkMove";
     console.log('dragstart', e);
   };
@@ -76,24 +76,24 @@ class Dnd extends PureComponent {
   onDrop = (item, e) => {
     // e.stopPropagation();
     // e.preventDefault();
-    // e.dataTransfer.getData('text/plain');
+    e.dataTransfer.getData('text/plain');
     console.log('onDrop', item, e);
   };
 
   dragEnter = (item, e) => {
-    e.persist();
     e.preventDefault();
+    // e.persist();
     this.hideBoxItem(e);
   };
 
   dragOver = (item, e) => {
-    e.persist();
     e.preventDefault();
+    // e.persist();
   };
 
   dragLeave = (item, e) => {
-    e.persist();
-    e.preventDefault();
+    // e.preventDefault();
+    // e.persist();
     this.showBoxItem(e);
   };
 
@@ -119,18 +119,6 @@ class Dnd extends PureComponent {
         {item.time}
       </div>
     ));
-    // const contentBoxItems = rowList.map( (item, index) => (
-    //   <div
-    //     key={item}
-    //     className={style.rowItems}
-    //     onDrop={this.onDrop.bind(this, item)}
-    //     onDragEnter={this.dragEnter.bind(this, item)}
-    //     onDragOver={this.dragOver.bind(this, item)}
-    //   >
-    //     {index === 0 ? item : ''}
-    //   </div>
-    // ));
-    // Nesting
     const contentBox = colList.map(item => (
       <div key={item} className={style.colItems}>
         {rowList.map(i => (
@@ -138,9 +126,9 @@ class Dnd extends PureComponent {
             key={i.id}
             className={style.rowItems}
             onDrop={this.onDrop.bind(this, i)}
-            onDragEnter={this.dragEnterThrottle.bind(this, i)}
-            onDragOver={this.dragOverThrottle.bind(this, i)}
-            onDragLeave={this.dragLeaveThrottle.bind(this, i)}
+            onDragEnter={this.dragEnter.bind(this, i)}
+            onDragOver={this.dragOver.bind(this, i)}
+            onDragLeave={this.dragLeave.bind(this, i)}
           >
             <div className={style.rowItem}>{`${i.time} / ${item}`}</div>
           </div>
