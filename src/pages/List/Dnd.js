@@ -12,24 +12,21 @@ class Dnd extends PureComponent {
     const items = [
       {
         id: 1,
+        name: 'g',
         startTime: '00:30',
         duration: 60,
-        top: '30px',
-        left: '70px',
       },
       {
         id: 2,
+        name: 'c',
         startTime: '01:00',
         duration: 30,
-        top: '60px',
-        left: '220px',
       },
       {
         id: 3,
+        name: 'i',
         startTime: '02:00',
         duration: 90,
-        top: '120px',
-        left: '370px',
       },
     ];
     super(props);
@@ -83,7 +80,8 @@ class Dnd extends PureComponent {
   dragEnter = (item, e) => {
     e.preventDefault();
     // e.persist();
-    this.hideBoxItem(e);
+    // this.hideBoxItem(e);
+    console.log('dragEnter', item, e);
   };
 
   dragOver = (item, e) => {
@@ -94,7 +92,8 @@ class Dnd extends PureComponent {
   dragLeave = (item, e) => {
     // e.preventDefault();
     // e.persist();
-    this.showBoxItem(e);
+    // this.showBoxItem(e);
+    console.log('dragLeave', item, e);
   };
 
   boxScroll = () => {
@@ -114,6 +113,11 @@ class Dnd extends PureComponent {
     if (dnd.times && dnd.times.list && dnd.times.list.length > 0) {
       rowList = dnd.times.list;
     }
+    items.map(item => {
+      item.left = (colList.findIndex(i => i === item.name) - 1) * 150 + 70;
+      item.top = (rowList.findIndex(i => i.time === item.startTime) - 1) * 30 + 30;
+      return item;
+    });
     const rowItems = rowList.map(item => (
       <div key={item.id} className={style.rowItems}>
         {item.time}
