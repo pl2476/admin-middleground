@@ -32,6 +32,7 @@ class Dnd extends PureComponent {
     super(props);
     this.boxRef = React.createRef();
     this.colTitleRef = React.createRef();
+    this.timeLineRef = React.createRef();
     this.state = {
       colList,
       // rowList,
@@ -40,9 +41,18 @@ class Dnd extends PureComponent {
     this.dragEnterThrottle = throttle(this.dragEnter, 1000);
     this.dragOverThrottle = throttle(this.dragOver, 1000);
     this.dragLeaveThrottle = throttle(this.dragOver, 1000);
+    this.timeLineTopPosition = 0;
+    this.interval = null;
   }
 
   componentDidMount() {
+    const that = this;
+    that.interval = null;
+    that.timeLineTopPosition = that.calcTopPosition() + 29;
+    that.interval = setInterval(() => {
+      that.timeLineTopPosition = that.calcTopPosition() + 29;
+      that.timeLineRef.current.style.top = `${that.timeLineTopPosition}px`;
+    }, 30000);
     const { dispatch } = this.props;
     dispatch({
       type: 'dnd/times',
@@ -99,6 +109,9 @@ class Dnd extends PureComponent {
   boxScroll = () => {
     this.colTitleRef.current.scrollLeft = this.boxRef.current.scrollLeft;
   };
+
+  calcTopPosition = () =>
+    Math.round((new Date().getTime() - new Date(new Date().setHours(0, 0, 0, 0))) / 60000);
 
   render() {
     const { colList, items } = this.state;
@@ -157,6 +170,16 @@ class Dnd extends PureComponent {
         {item.id}
       </div>
     ));
+    const timeline = (
+      <div
+        ref={this.timeLineRef}
+        className={style.timeLine}
+        style={{
+          width: colList.length * 150,
+          top: `${this.timeLineTopPosition}px`,
+        }}
+      />
+    );
 
     return (
       <div className={style.container}>
@@ -168,6 +191,7 @@ class Dnd extends PureComponent {
             <div className={style.firstCol}>{rowItems}</div>
             {contentBox}
             {contentItems}
+            {timeline}
           </div>
         </div>
       </div>
