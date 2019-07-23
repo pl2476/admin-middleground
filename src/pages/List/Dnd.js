@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { throttle } from 'underscore';
+// import { throttle } from 'underscore';
 import style from './Dnd.less';
 
 @connect(({ dnd }) => ({
@@ -16,9 +16,9 @@ class Dnd extends PureComponent {
     this.state = {
       colList,
     };
-    this.dragEnterThrottle = throttle(this.dragEnter, 1000);
-    this.dragOverThrottle = throttle(this.dragOver, 1000);
-    this.dragLeaveThrottle = throttle(this.dragOver, 1000);
+    // this.dragEnterThrottle = throttle(this.dragEnter, 1000);
+    // this.dragOverThrottle = throttle(this.dragOver, 1000);
+    // this.dragLeaveThrottle = throttle(this.dragOver, 1000);
     this.timeLineTopPosition = 0;
     this.interval = null;
   }
@@ -166,12 +166,13 @@ class Dnd extends PureComponent {
         ))}
       </div>
     ));
-    const contentItems = items.map((item, index) => (
+    const contentItems = items.map(item => (
       <div
         key={item.id}
         className={style.contentItem}
         style={{
-          backgroundColor: index % 2 === 0 ? '#4d9a77' : '#b6d051',
+          // eslint-disable-next-line no-bitwise
+          backgroundColor: `#${((Math.random() * 0xffffff) << 0).toString(16)}`,
           opacity: 0.8,
           height: `${item.duration}px`,
           // lineHeight: `${item.duration}px`,
