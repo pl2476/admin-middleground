@@ -132,3 +132,7 @@ export async function getMenuData() {
 export async function getTimes(params) {
   return request(`/api/getTimes?${stringify(params)}`);
 }
+
+export async function getItems(params) {
+  return request(`/api/getItems?${stringify(params)}`);
+}

@@ -9,34 +9,12 @@ import style from './Dnd.less';
 class Dnd extends PureComponent {
   constructor(props) {
     const colList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
-    const items = [
-      {
-        id: 1,
-        name: 'g',
-        startTime: '00:30',
-        duration: 60,
-      },
-      {
-        id: 2,
-        name: 'c',
-        startTime: '01:00',
-        duration: 30,
-      },
-      {
-        id: 3,
-        name: 'i',
-        startTime: '02:00',
-        duration: 90,
-      },
-    ];
     super(props);
     this.boxRef = React.createRef();
     this.colTitleRef = React.createRef();
     this.timeLineRef = React.createRef();
     this.state = {
       colList,
-      // rowList,
-      items,
     };
     this.dragEnterThrottle = throttle(this.dragEnter, 1000);
     this.dragOverThrottle = throttle(this.dragOver, 1000);
@@ -51,11 +29,17 @@ class Dnd extends PureComponent {
     that.timeLineTopPosition = that.calcTopPosition() + 29;
     that.interval = setInterval(() => {
       that.timeLineTopPosition = that.calcTopPosition() + 29;
-      that.timeLineRef.current.style.top = `${that.timeLineTopPosition}px`;
+      if (that.timeLineRef && that.timeLineRef.current) {
+        that.timeLineRef.current.style.top = `${that.timeLineTopPosition}px`;
+      }
     }, 30000);
     const { dispatch } = this.props;
     dispatch({
       type: 'dnd/times',
+      payload: {},
+    });
+    dispatch({
+      type: 'dnd/items',
       payload: {},
     });
   }
@@ -80,7 +64,7 @@ class Dnd extends PureComponent {
     console.log('dragstart', e);
   };
 
-  onDrop = (item, e) => {
+  onDrop = (i, item, e) => {
     // e.stopPropagation();
     // e.preventDefault();
     e.dataTransfer.getData('text/plain');
@@ -114,7 +98,7 @@ class Dnd extends PureComponent {
     Math.round((new Date().getTime() - new Date(new Date().setHours(0, 0, 0, 0))) / 60000);
 
   render() {
-    const { colList, items } = this.state;
+    const { colList } = this.state;
     const { dnd } = this.props;
     const colTitleList = ['', ...colList];
     const colTitle = colTitleList.map(item => (
@@ -123,8 +107,12 @@ class Dnd extends PureComponent {
       </div>
     ));
     let rowList = [];
+    let items = [];
     if (dnd.times && dnd.times.list && dnd.times.list.length > 0) {
       rowList = dnd.times.list;
+    }
+    if (dnd.items && dnd.items.list && dnd.items.list.length > 0) {
+      items = dnd.items.list;
     }
     items.map(item => {
       item.left = (colList.findIndex(i => i === item.name) - 1) * 150 + 70;
@@ -142,7 +130,7 @@ class Dnd extends PureComponent {
           <div
             key={i.id}
             className={style.rowItems}
-            onDrop={this.onDrop.bind(this, i)}
+            onDrop={this.onDrop.bind(this, i, item)}
             onDragEnter={this.dragEnter.bind(this, i)}
             onDragOver={this.dragOver.bind(this, i)}
             onDragLeave={this.dragLeave.bind(this, i)}
