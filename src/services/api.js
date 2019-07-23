@@ -142,7 +142,6 @@ export async function postItem(params) {
     method: 'POST',
     body: {
       ...params,
-      method: 'post',
     },
   });
 }

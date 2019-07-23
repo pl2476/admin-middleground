@@ -60,15 +60,25 @@ class Dnd extends PureComponent {
 
   dragStart = (item, e) => {
     e.dataTransfer.setData('text/plain', item.id);
-    // e.dataTransfer.effectAllowed = "linkMove";
+    e.dataTransfer.effectAllowed = 'linkMove';
     console.log('dragstart', e);
   };
 
-  onDrop = (i, item, e) => {
+  onDrop = (row, col, e) => {
     // e.stopPropagation();
     // e.preventDefault();
-    e.dataTransfer.getData('text/plain');
-    console.log('onDrop', item, e);
+    e.dataTransfer.dropEffect = 'move';
+    const id = e.dataTransfer.getData('text/plain');
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dnd/postItem',
+      payload: {
+        method: 'update',
+        id,
+        name: col,
+        startTime: row.time,
+      },
+    });
   };
 
   dragEnter = (item, e) => {
@@ -102,6 +112,7 @@ class Dnd extends PureComponent {
     dispatch({
       type: 'dnd/postItem',
       payload: {
+        method: 'post',
         name: col,
         startTime: row.time,
         duration: 90,

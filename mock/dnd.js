@@ -175,7 +175,7 @@ function postItem(req, res, u, b) {
       break;
     case 'update':
       items = items.map(item => {
-        if (item.id === id) {
+        if (item.id === Number(id)) {
           Object.assign(item, { startTime, name });
           return item;
         }
