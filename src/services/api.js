@@ -136,3 +136,13 @@ export async function getTimes(params) {
 export async function getItems(params) {
   return request(`/api/getItems?${stringify(params)}`);
 }
+
+export async function postItem(params) {
+  return request(`/api/postItem`, {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
+}

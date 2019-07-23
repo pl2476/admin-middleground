@@ -1,4 +1,4 @@
-import { getTimes, getItems } from '@/services/api';
+import { getTimes, getItems, postItem } from '@/services/api';
 
 export default {
   namespace: 'dnd',
@@ -23,6 +23,16 @@ export default {
     },
     *items({ payload }, { call, put }) {
       const res = yield call(getItems, payload);
+      yield put({
+        type: 'saveItems',
+        payload: {
+          list: res.list,
+          pagination: res.pagination,
+        },
+      });
+    },
+    *postItem({ payload }, { call, put }) {
+      const res = yield call(postItem, payload);
       yield put({
         type: 'saveItems',
         payload: {

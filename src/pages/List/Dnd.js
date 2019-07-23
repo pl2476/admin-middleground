@@ -97,6 +97,20 @@ class Dnd extends PureComponent {
   calcTopPosition = () =>
     Math.round((new Date().getTime() - new Date(new Date().setHours(0, 0, 0, 0))) / 60000);
 
+  boxOnClick = (row, col) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dnd/postItem',
+      payload: {
+        name: col,
+        startTime: row.time,
+        duration: 90,
+        description:
+          'Hold fast to dreams For when dreams go Life is a barren field Frozen with snow.',
+      },
+    });
+  };
+
   render() {
     const { colList } = this.state;
     const { dnd } = this.props;
@@ -115,7 +129,7 @@ class Dnd extends PureComponent {
       items = dnd.items.list;
     }
     items.map(item => {
-      item.left = (colList.findIndex(i => i === item.name) - 1) * 150 + 70;
+      item.left = colList.findIndex(i => i === item.name) * 150 + 70;
       item.top = (rowList.findIndex(i => i.time === item.startTime) - 1) * 30 + 30;
       return item;
     });
@@ -134,6 +148,7 @@ class Dnd extends PureComponent {
             onDragEnter={this.dragEnter.bind(this, i)}
             onDragOver={this.dragOver.bind(this, i)}
             onDragLeave={this.dragLeave.bind(this, i)}
+            onClick={this.boxOnClick.bind(this, i, item)}
           >
             <div className={style.rowItem}>{`${i.time} / ${item}`}</div>
           </div>
@@ -148,14 +163,14 @@ class Dnd extends PureComponent {
           backgroundColor: index % 2 === 0 ? '#4d9a77' : '#b6d051',
           opacity: 0.8,
           height: `${item.duration}px`,
-          lineHeight: `${item.duration}px`,
+          // lineHeight: `${item.duration}px`,
           top: item.top,
           left: item.left,
         }}
         draggable
         onDragStart={this.dragStart.bind(this, item)}
       >
-        {item.id}
+        {item.description}
       </div>
     ));
     const timeline = (
