@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { Menu, Dropdown } from 'antd';
 // import { throttle } from 'underscore';
 import style from './Dnd.less';
 
@@ -122,6 +123,10 @@ class Dnd extends PureComponent {
     });
   };
 
+  containerRightClick = e => {
+    e.preventDefault();
+  };
+
   render() {
     const { colList } = this.state;
     const { dnd } = this.props;
@@ -149,41 +154,71 @@ class Dnd extends PureComponent {
         {item.time}
       </div>
     ));
-    const contentBox = colList.map(item => (
-      <div key={item} className={style.colItems}>
-        {rowList.map(i => (
-          <div
-            key={i.id}
-            className={style.rowItems}
-            onDrop={this.onDrop.bind(this, i, item)}
-            onDragEnter={this.dragEnter.bind(this, i)}
-            onDragOver={this.dragOver.bind(this, i)}
-            onDragLeave={this.dragLeave.bind(this, i)}
-            onClick={this.boxOnClick.bind(this, i, item)}
+    const contentBox = colList.map(colItem => (
+      <div key={colItem} className={style.colItems}>
+        {rowList.map(rowItem => (
+          <Dropdown
+            key={rowItem.id}
+            overlay={
+              <Menu>
+                <Menu.Item key="1">Add</Menu.Item>
+                <Menu.Item key="2">Add multiple</Menu.Item>
+                <Menu.Item key="3">Others</Menu.Item>
+              </Menu>
+            }
+            // getPopupContainer={() => document.getElementsByClassName(style.box)[0]}
+            getPopupContainer={trigger => trigger.parentNode}
+            trigger={['contextMenu', 'click']}
           >
-            <div className={style.rowItem}>{`${i.time} / ${item}`}</div>
-          </div>
+            <div
+              key={rowItem.id}
+              className={style.rowItems}
+              onDrop={this.onDrop.bind(this, rowItem, colItem)}
+              onDragEnter={this.dragEnter.bind(this, rowItem)}
+              onDragOver={this.dragOver.bind(this, rowItem)}
+              onDragLeave={this.dragLeave.bind(this, rowItem)}
+              // onClick={this.boxOnClick.bind(this, rowItem, colItem)}
+            >
+              <div className={style.rowItem}>{`${rowItem.time} / ${colItem}`}</div>
+            </div>
+          </Dropdown>
         ))}
       </div>
     ));
+    // const contentMenu = (
+
+    // );
     const contentItems = items.map(item => (
-      <div
+      <Dropdown
         key={item.id}
-        className={style.contentItem}
-        style={{
-          // eslint-disable-next-line no-bitwise
-          backgroundColor: `#${((Math.random() * 0xffffff) << 0).toString(16)}`,
-          opacity: 0.8,
-          height: `${item.duration}px`,
-          // lineHeight: `${item.duration}px`,
-          top: item.top,
-          left: item.left,
-        }}
-        draggable
-        onDragStart={this.dragStart.bind(this, item)}
+        overlay={
+          <Menu>
+            <Menu.Item key="1">Edit</Menu.Item>
+            <Menu.Item key="2">Cancel</Menu.Item>
+          </Menu>
+        }
+        getPopupContainer={trigger => trigger.parentNode}
+        trigger={['contextMenu', 'click']}
+        onVisibleChange={this.boxRightClick}
       >
-        {item.description}
-      </div>
+        <div
+          key={item.id}
+          className={style.contentItem}
+          style={{
+            // eslint-disable-next-line no-bitwise
+            backgroundColor: `#${((Math.random() * 0xffffff) << 0).toString(16)}`,
+            opacity: 0.8,
+            height: `${item.duration}px`,
+            // lineHeight: `${item.duration}px`,
+            top: item.top,
+            left: item.left,
+          }}
+          draggable
+          onDragStart={this.dragStart.bind(this, item)}
+        >
+          {item.description}
+        </div>
+      </Dropdown>
     ));
     const timeline = (
       <div
@@ -197,7 +232,7 @@ class Dnd extends PureComponent {
     );
 
     return (
-      <div className={style.container}>
+      <div className={style.container} onContextMenu={this.containerRightClick}>
         <div className={style.colTitle} ref={this.colTitleRef}>
           {colTitle}
         </div>
