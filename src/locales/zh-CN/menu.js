@@ -43,4 +43,6 @@ export default {
   'menu.demo.schedule': '任务表',
   'menu.demo.dnd': '拖拽',
   'menu.demo.booking': '搜索列表',
+  'menu.module2': '模块2',
+  'menu.module2.grid': 'grid',
 };
