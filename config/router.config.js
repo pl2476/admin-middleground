@@ -190,6 +190,19 @@ export default [
         ],
       },
       {
+        path: '/module2',
+        icon: 'table',
+        name: 'module2',
+        routes: [
+          {
+            path: '/module2/grid',
+            name: 'grid',
+            hideInMenu: false,
+            component: './Grid/grid',
+          },
+        ],
+      },
+      {
         path: '/profile',
         name: 'profile',
         icon: 'profile',
