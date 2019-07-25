@@ -1,3 +1,99 @@
-.gird {
-  background: #fff;
+.grid {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  .left {
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #b9a8a8;
+    border-radius: 4px;
+    background: #fff;
+    overflow: auto;
+    .top {
+      width: 100%;
+      height: 50px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      border-bottom: 1px solid #b9a8a8;
+    }
+    .middle {
+      width: 100%;
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow: auto;
+      .head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+      .body {
+        background: #fff;
+        .row:last-child {
+          .cell {
+            border-bottom: 0;
+          }
+        }
+      }
+      .row {
+        display: flex;
+        .cell:first-child {
+          width: 88px;
+          position: sticky;
+          left: 0;
+          z-index: 1;
+        }
+        .cell:last-child {
+          border-right: 0;
+        }
+      }
+      .cell {
+        width: 150px;
+        background: #fafafa;
+        flex-grow: 0;
+        flex-shrink: 0;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-bottom: 1px dotted #aaa;
+        border-right: 1px solid #aaa;
+      }
+    }
+    .bottom {
+      height: 50px;
+      background: #fff;
+      border-top: 1px solid #b9a8a8;
+    }
+  }
+  .right {
+    margin-left: 10px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .top {
+      border: 1px solid #b9a8a8;
+      border-radius: 4px;
+      background: #fff;
+      width: 100%;
+      height: 100px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-bottom: 10px;
+    }
+    .bottom {
+      border: 1px solid #b9a8a8;
+      border-radius: 4px;
+      background: #fff;
+      width: 100%;
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+  }
 }
