@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Calendar } from 'antd';
 // import { throttle } from 'underscore';
 import style from './Dnd.less';
 
@@ -185,9 +185,7 @@ class Dnd extends PureComponent {
         ))}
       </div>
     ));
-    // const contentMenu = (
-
-    // );
+    // to do: hide context-menu when not hovering
     const contentItems = items.map(item => (
       <Dropdown
         key={item.id}
@@ -233,16 +231,28 @@ class Dnd extends PureComponent {
 
     return (
       <div className={style.container} onContextMenu={this.containerRightClick}>
-        <div className={style.colTitle} ref={this.colTitleRef}>
-          {colTitle}
-        </div>
-        <div className={style.dnd}>
-          <div ref={this.boxRef} className={style.box} onScrollCapture={this.boxScroll.bind(this)}>
-            <div className={style.firstCol}>{rowItems}</div>
-            {contentBox}
-            {contentItems}
-            {timeline}
+        <div className={style.left}>
+          <div className={style.colTitle} ref={this.colTitleRef}>
+            {colTitle}
           </div>
+          <div className={style.dnd}>
+            <div
+              ref={this.boxRef}
+              className={style.box}
+              onScrollCapture={this.boxScroll.bind(this)}
+            >
+              <div className={style.firstCol}>{rowItems}</div>
+              {contentBox}
+              {contentItems}
+              {timeline}
+            </div>
+          </div>
+        </div>
+        <div className={style.right}>
+          <div className={style.calendar}>
+            <Calendar fullscreen={false} />
+          </div>
+          <div className={style.waiting}>waiting</div>
         </div>
       </div>
     );
