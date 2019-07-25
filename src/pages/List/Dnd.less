@@ -72,7 +72,7 @@
         border-bottom: 0;
       }
       .contentItem {
-        width: 150px;
+        width: 149px;
         position: absolute;
         cursor: move;
         top: 0;
@@ -119,9 +119,6 @@
             border-bottom: 0;
           }
         }
-        .colItems:last-of-type {
-          border-right: 0;
-        }
         .colItems {
           flex-grow: 0;
           flex-shrink: 0;
@@ -146,6 +143,15 @@
           .rowItems:last-child {
             border-bottom: 0;
           }
+        }
+        // .colItems:nth-last-of-type(1) {
+        //   border-right: 0;
+        // }
+        // .colItems:last-of-type {
+        //   border-right: 0;
+        // }
+        .last {
+          border-right: 0;
         }
       }
     }

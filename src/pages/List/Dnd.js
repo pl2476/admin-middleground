@@ -154,8 +154,11 @@ class Dnd extends PureComponent {
         {item.time}
       </div>
     ));
-    const contentBox = colList.map(colItem => (
-      <div key={colItem} className={style.colItems}>
+    const contentBox = colList.map((colItem, index) => (
+      <div
+        key={colItem}
+        className={`${style.colItems} ${index === colList.length - 1 ? style.last : ''}`}
+      >
         {rowList.map(rowItem => (
           <Dropdown
             key={rowItem.id}
@@ -206,7 +209,7 @@ class Dnd extends PureComponent {
             // eslint-disable-next-line no-bitwise
             backgroundColor: `#${((Math.random() * 0xffffff) << 0).toString(16)}`,
             opacity: 0.8,
-            height: `${item.duration}px`,
+            height: `${item.duration - 1}px`,
             // lineHeight: `${item.duration}px`,
             top: item.top,
             left: item.left,
