@@ -189,7 +189,7 @@ class Dnd extends PureComponent {
       </div>
     ));
     // to do: hide context-menu when not hovering
-    const contentItems = items.map(item => (
+    const contentItems = items.map((item, index) => (
       <Dropdown
         key={item.id}
         overlay={
@@ -204,7 +204,7 @@ class Dnd extends PureComponent {
       >
         <div
           key={item.id}
-          className={style.contentItem}
+          className={`${style.contentItem}  ${index === items.length - 1 ? style.last : ''}`}
           style={{
             // eslint-disable-next-line no-bitwise
             backgroundColor: `#${((Math.random() * 0xffffff) << 0).toString(16)}`,
