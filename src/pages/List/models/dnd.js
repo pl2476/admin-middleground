@@ -1,4 +1,5 @@
 import { getTimes, getItems, postItem } from '@/services/api';
+import { notification } from 'antd';
 
 export default {
   namespace: 'dnd',
@@ -31,15 +32,26 @@ export default {
         },
       });
     },
-    *postItem({ payload }, { call, put }) {
+    *postItem({ payload, callback }, { call, put }) {
       const res = yield call(postItem, payload);
-      yield put({
-        type: 'saveItems',
-        payload: {
-          list: res.list,
-          pagination: res.pagination,
-        },
-      });
+      if (res) {
+        if (callback && typeof callback === 'function') {
+          callback({
+            code: 200,
+          });
+        }
+        yield put({
+          type: 'saveItems',
+          payload: {
+            list: res.list,
+            pagination: res.pagination,
+          },
+        });
+      } else {
+        notification.error({
+          message: res.msg || 'Error',
+        });
+      }
     },
   },
 

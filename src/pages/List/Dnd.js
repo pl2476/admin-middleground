@@ -10,12 +10,27 @@ import style from './Dnd.less';
 class Dnd extends PureComponent {
   constructor(props) {
     const colList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
+    const waitingItemsList = [
+      {
+        description: 'waiting item1',
+        duration: 60,
+        id: Math.floor(Math.random() * 88) + 8,
+        status: 'waiting',
+      },
+      {
+        description: 'waiting item2',
+        duration: 30,
+        id: Math.floor(Math.random() * 288) + 88,
+        status: 'waiting',
+      },
+    ];
     super(props);
     this.boxRef = React.createRef();
     this.colTitleRef = React.createRef();
     this.timeLineRef = React.createRef();
     this.state = {
       colList,
+      waitingItemsList,
     };
     // this.dragEnterThrottle = throttle(this.dragEnter, 1000);
     // this.dragOverThrottle = throttle(this.dragOver, 1000);
@@ -60,26 +75,53 @@ class Dnd extends PureComponent {
   };
 
   dragStart = (item, e) => {
-    e.dataTransfer.setData('text/plain', item.id);
+    e.dataTransfer.setData(
+      'text/plain',
+      JSON.stringify({
+        id: item.id,
+      })
+    );
     e.dataTransfer.effectAllowed = 'linkMove';
-    console.log('dragstart', e);
   };
 
   onDrop = (row, col, e) => {
     // e.stopPropagation();
     // e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    const id = e.dataTransfer.getData('text/plain');
+    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
     const { dispatch } = this.props;
-    dispatch({
-      type: 'dnd/postItem',
-      payload: {
-        method: 'update',
-        id,
-        name: col,
-        startTime: row.time,
-      },
-    });
+    if (data.status === 'waiting') {
+      dispatch({
+        type: 'dnd/postItem',
+        payload: {
+          method: 'post',
+          id: data.id,
+          name: col,
+          startTime: row.time,
+          duration: data.duration || 0,
+          description: data.description || '',
+        },
+        callback: res => {
+          if (res.code === 200) {
+            const { waitingItemsList } = this.state;
+            const filteredData = waitingItemsList.filter(i => data.id !== i.id);
+            this.setState({
+              waitingItemsList: filteredData,
+            });
+          }
+        },
+      });
+    } else {
+      dispatch({
+        type: 'dnd/postItem',
+        payload: {
+          method: 'update',
+          id: data.id,
+          name: col,
+          startTime: row.time,
+        },
+      });
+    }
   };
 
   dragEnter = (item, e) => {
@@ -127,8 +169,13 @@ class Dnd extends PureComponent {
     e.preventDefault();
   };
 
+  waitingItemDragStart = (item, e) => {
+    e.dataTransfer.effectAllowed = 'linkMove';
+    e.dataTransfer.setData('text/plain', JSON.stringify(item));
+  };
+
   render() {
-    const { colList } = this.state;
+    const { colList, waitingItemsList } = this.state;
     const { dnd } = this.props;
     const colTitleList = ['', ...colList];
     const colTitle = colTitleList.map(item => (
@@ -231,6 +278,16 @@ class Dnd extends PureComponent {
         }}
       />
     );
+    const waitingItems = waitingItemsList.map(item => (
+      <div
+        key={item.description}
+        className={style.waitingItem}
+        draggable
+        onDragStart={this.waitingItemDragStart.bind(this, item)}
+      >
+        {item.description}
+      </div>
+    ));
 
     return (
       <div className={style.container} onContextMenu={this.containerRightClick}>
@@ -255,7 +312,10 @@ class Dnd extends PureComponent {
           <div className={style.calendar}>
             <Calendar fullscreen={false} />
           </div>
-          <div className={style.waiting}>waiting</div>
+          <div className={style.waiting}>
+            <h5>Waiting Items</h5>
+            <div className={style.box}>{waitingItems}</div>
+          </div>
         </div>
       </div>
     );
