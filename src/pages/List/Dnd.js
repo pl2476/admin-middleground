@@ -64,14 +64,12 @@ class Dnd extends PureComponent {
     if (e.target && e.target.children[0] && e.target.children[0].hasAttribute('class')) {
       e.target.children[0].removeAttribute('class');
     }
-    console.log('hideBoxItem');
   };
 
   showBoxItem = e => {
     if (e.target && e.target.children[0] && !e.target.children[0].hasAttribute('class')) {
       e.target.children[0].setAttribute('class', style.rowItem);
     }
-    console.log('showBoxItem');
   };
 
   dragStart = (item, e) => {
@@ -128,7 +126,6 @@ class Dnd extends PureComponent {
     e.preventDefault();
     // e.persist();
     // this.hideBoxItem(e);
-    console.log('dragEnter', item, e);
   };
 
   dragOver = (item, e) => {
@@ -136,12 +133,11 @@ class Dnd extends PureComponent {
     // e.persist();
   };
 
-  dragLeave = (item, e) => {
-    // e.preventDefault();
-    // e.persist();
-    // this.showBoxItem(e);
-    console.log('dragLeave', item, e);
-  };
+  // dragLeave = (item, e) => {
+  // e.preventDefault();
+  // e.persist();
+  // this.showBoxItem(e);
+  // };
 
   boxScroll = () => {
     this.colTitleRef.current.scrollLeft = this.boxRef.current.scrollLeft;
@@ -226,7 +222,7 @@ class Dnd extends PureComponent {
               onDrop={this.onDrop.bind(this, rowItem, colItem)}
               onDragEnter={this.dragEnter.bind(this, rowItem)}
               onDragOver={this.dragOver.bind(this, rowItem)}
-              onDragLeave={this.dragLeave.bind(this, rowItem)}
+              // onDragLeave={this.dragLeave.bind(this, rowItem)}
               // onClick={this.boxOnClick.bind(this, rowItem, colItem)}
             >
               <div className={style.rowItem}>{`${rowItem.time} / ${colItem}`}</div>
@@ -282,6 +278,10 @@ class Dnd extends PureComponent {
       <div
         key={item.description}
         className={style.waitingItem}
+        style={{
+          height: `${item.duration - 1}px`,
+          lineHeight: `${item.duration - 1}px`,
+        }}
         draggable
         onDragStart={this.waitingItemDragStart.bind(this, item)}
       >
