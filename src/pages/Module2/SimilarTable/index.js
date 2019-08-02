@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import style from './Grid.less';
+import style from './index.less';
 
 class Grid extends PureComponent {
   render() {

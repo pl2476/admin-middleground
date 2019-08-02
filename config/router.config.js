@@ -195,10 +195,10 @@ export default [
         name: 'module2',
         routes: [
           {
-            path: '/module2/grid',
-            name: 'grid',
+            path: '/module2/similarTable',
+            name: 'similarTable',
             hideInMenu: false,
-            component: './Grid/grid',
+            component: './Module2/SimilarTable',
           },
         ],
       },
