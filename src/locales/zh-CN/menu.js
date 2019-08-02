@@ -44,5 +44,5 @@ export default {
   'menu.demo.dnd': '拖拽',
   'menu.demo.booking': '搜索列表',
   'menu.module2': '模块2',
-  'menu.module2.grid': 'grid',
+  'menu.module2.similarTable': 'similarTable',
 };

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import style from './index.less';
 
-class Grid extends PureComponent {
+class SimilarTable extends PureComponent {
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6, 7];
     const tableBodyList = [];
@@ -43,4 +43,4 @@ class Grid extends PureComponent {
   }
 }
 
-export default Grid;
+export default SimilarTable;
